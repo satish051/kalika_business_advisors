@@ -2,291 +2,377 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kalika Business Advisors | A Consulting Firm for Everything</title>
+    <!-- Viewport tag is crucial for mobile responsiveness -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <title>Kalika Business Advisors | Corporate Excellence</title>
     
-    <!-- ADD THIS LINE FOR THE TAB ICON -->
+    <!-- Tab Icon matching your circular seal -->
     <link rel="icon" href="logo.png" type="image/png">
     
     <!-- Premium Global Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
-    <!-- FontAwesome -->
+    <!-- FontAwesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
         :root {
-            /* Corporate International Palette */
-            --primary: #0A2540;        /* Deep Corporate Navy */
-            --accent: #0066FF;         /* Trust vibrant blue */
-            --accent-hover: #0052CC;
-            --background: #F8FAFC;     /* Off-white background */
-            --surface: #FFFFFF;        /* Pure white cards */
-            --text-main: #0F172A;      /* Near black for headings */
-            --text-muted: #475569;     /* Slate gray for body */
-            --border: #E2E8F0;         /* Light borders */
+            /* Ultra-Luxury Corporate Palette: Midnight Navy & Champagne Gold */
+            --primary: #080C11;        
+            --primary-light: #121A25;  
+            --accent: #D4AF37;         
+            --accent-hover: #C5A028;   
+            --background: #FDFDFD;     
+            --surface: #FFFFFF;        
+            --text-main: #111827;      
+            --text-muted: #4B5563;     
+            --border: #E5E7EB;         
+            --gold-border: rgba(212, 175, 55, 0.3);
             
-            --radius-md: 12px;
-            --radius-lg: 24px;
-            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-            --shadow-md: 0 10px 25px -3px rgba(0, 0, 0, 0.05);
-            --shadow-hover: 0 20px 40px -5px rgba(10, 37, 64, 0.12);
+            --radius-sm: 4px;
+            --radius-md: 8px;
+            --radius-lg: 16px;
             
-            --max-width: 1280px;
+            --shadow-soft: 0 10px 40px -10px rgba(0,0,0,0.05);
+            --shadow-gold: 0 15px 40px -15px rgba(212, 175, 55, 0.25);
+            
+            --max-width: 1320px;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
         html { scroll-behavior: smooth; }
-        body { background-color: var(--background); color: var(--text-muted); font-family: 'Inter', sans-serif; line-height: 1.6; overflow-x: hidden; }
-        h1, h2, h3, h4, h5 { font-family: 'Plus Jakarta Sans', sans-serif; color: var(--text-main); line-height: 1.2; letter-spacing: -0.02em; }
-        a { text-decoration: none; color: inherit; transition: all 0.3s ease; }
+        /* Prevent horizontal scroll bugs on mobile */
+        body { background-color: var(--background); color: var(--text-muted); font-family: 'Inter', sans-serif; line-height: 1.8; overflow-x: hidden; }
+        
+        h1, h2, h3 { font-family: 'Playfair Display', serif; color: var(--text-main); line-height: 1.2; }
+        h4, h5 { font-family: 'Plus Jakarta Sans', sans-serif; color: var(--text-main); letter-spacing: 0.05em; }
+        a { text-decoration: none; color: inherit; transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
         img { max-width: 100%; display: block; object-fit: cover; }
         
         .container { max-width: var(--max-width); margin: 0 auto; padding: 0 5%; }
+        
+        section { padding: 130px 0; }
+        .section-header { margin-bottom: 80px; max-width: 800px; position: relative; }
+        .section-header h5 { color: var(--accent); text-transform: uppercase; letter-spacing: 0.15em; font-size: 0.8rem; margin-bottom: 20px; font-weight: 700; display: flex; align-items: center; gap: 12px; }
+        .section-header h5::after { content: ''; width: 40px; height: 1px; background: var(--accent); display: block; }
+        /* Dynamic Typography */
+        .section-header h2 { font-size: clamp(2rem, 5vw, 3.8rem); margin-bottom: 25px; font-weight: 500; }
+        .section-header p { font-size: clamp(1rem, 2vw, 1.15rem); font-weight: 300; color: var(--text-muted); max-width: 650px; }
+        
+        .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 450px), 1fr)); gap: 60px; }
+        .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); gap: 40px; }
 
         /* Navigation */
-        nav { position: fixed; top: 0; width: 100%; z-index: 100; transition: all 0.4s ease; padding: 24px 0; }
-        nav.scrolled { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(12px); padding: 12px 0; border-bottom: 1px solid var(--border); box-shadow: var(--shadow-sm); }
-        nav.scrolled .nav-links a { color: var(--text-muted); }
+        nav { position: fixed; top: 0; width: 100%; z-index: 100; transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); padding: 25px 0; }
+        nav.scrolled { background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(25px); padding: 15px 0; border-bottom: 1px solid rgba(0,0,0,0.03); box-shadow: var(--shadow-soft); }
+        nav.scrolled .nav-links a { color: var(--text-main); }
         .nav-container { display: flex; justify-content: space-between; align-items: center; }
         
-        /* Logo & Company Name Handling */
-        .logo { display: flex; align-items: center; gap: 12px; text-decoration: none; position: relative; z-index: 101; }
-        .logo img { height: 65px; width: auto; transition: all 0.3s ease; }
+        .logo { display: flex; align-items: center; gap: 18px; text-decoration: none; position: relative; z-index: 101; }
+        .logo img { height: 70px; width: auto; transition: all 0.5s ease; }
         .logo-text { display: flex; flex-direction: column; justify-content: center; font-family: 'Plus Jakarta Sans', sans-serif;}
-        .logo-main { font-size: 1.1rem; font-weight: 800; color: white; letter-spacing: -0.02em; transition: color 0.3s; line-height: 1.1; }
-        .logo-sub { font-size: 0.65rem; font-weight: 700; color: var(--accent); letter-spacing: 0.05em; text-transform: uppercase; margin-top: 2px;}
+        .logo-main { font-size: 1.15rem; font-weight: 700; color: white; letter-spacing: 0.05em; transition: color 0.5s; line-height: 1.1; }
+        .logo-sub { font-size: 0.65rem; font-weight: 600; color: var(--accent); letter-spacing: 0.15em; text-transform: uppercase; margin-top: 4px;}
         
-        /* Invert black logo to white when on transparent dark background */
         #navbar:not(.scrolled) .logo img { filter: invert(1) brightness(2); }
-        /* Keep original black logo when scrolled (white background), scale down slightly, turn text dark */
-        #navbar.scrolled .logo img { filter: none; height: 50px; }
+        #navbar.scrolled .logo img { filter: none; height: 55px; }
         #navbar.scrolled .logo-main { color: var(--primary); }
 
-        .nav-links { display: flex; gap: 32px; align-items: center; }
-        .nav-links a { font-size: 0.95rem; font-weight: 500; color: rgba(255,255,255,0.9); transition: color 0.3s; position: relative;}
-        .nav-links a:hover { color: var(--accent); }
+        .nav-links { display: flex; gap: 30px; align-items: center; } 
+        .nav-links a { font-size: 0.8rem; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; color: rgba(255,255,255,0.9); text-transform: uppercase; letter-spacing: 0.1em; position: relative;}
+        .nav-links a:hover { color: var(--accent) !important; }
         
-        /* The Active Indicator (Underline) */
         .nav-links a:not(.nav-cta)::after {
-            content: '';
-            position: absolute;
-            bottom: -6px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 0;
-            height: 2px;
-            background: var(--accent);
-            transition: width 0.3s ease;
+            content: ''; position: absolute; bottom: -8px; left: 0;
+            width: 0; height: 1px; background: var(--accent); transition: width 0.5s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        
         .nav-links a.active { color: var(--accent) !important; }
         .nav-links a.active::after { width: 100%; }
 
-        .nav-cta { background: var(--accent); color: white !important; padding: 10px 24px; border-radius: 100px; font-weight: 600; }
-        .nav-cta:hover { background: var(--accent-hover); transform: translateY(-1px); }
+        .nav-cta { 
+            background: var(--accent); color: var(--primary) !important; padding: 10px 24px; 
+            border-radius: 2px; font-weight: 700; font-size: 0.75rem; letter-spacing: 0.1em;
+            border: 1px solid var(--accent); white-space: nowrap; transition: all 0.4s ease;
+        }
+        .nav-cta:hover { 
+            background: transparent; color: var(--accent) !important;
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.4); transform: translateY(-2px);
+        }
 
-        /* Hamburger Menu Icon */
-        .menu-toggle { display: none; font-size: 1.5rem; color: white; cursor: pointer; z-index: 101; transition: color 0.3s; }
+        .menu-toggle { display: none; font-size: 1.6rem; color: white; cursor: pointer; z-index: 101; transition: color 0.4s; }
         nav.scrolled .menu-toggle { color: var(--primary); }
 
-        /* Media-Rich Hero Section */
+        /* Hero Section */
         .hero {
-            position: relative;
-            padding: 220px 0 140px;
-            min-height: 100vh;
-            display: flex; align-items: center;
-            background-color: var(--primary);
-            overflow: hidden;
+            position: relative; padding: 200px 0 100px; min-height: 100vh;
+            display: flex; align-items: center; background-color: var(--primary); overflow: hidden;
         }
         .hero-bg {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background-image: url('homepage.jpg');
-            background-size: cover; background-position: center;
-            z-index: 0;
+            background-image: url('amazing-panorama-from-gokyo-ri-viewpoint-mount-everest-lho-la-nuptse-lhotse-peaks-sagarmatha-national-park-nepalgolden-sunrise-with-clear-blue-sky-mt-everest-peak-view.jpg'); background-size: cover; background-position: center; z-index: 0;
+            transform: scale(1.08); animation: slowZoom 25s ease-out forwards;
         }
+        @keyframes slowZoom { 100% { transform: scale(1); } }
         .hero-overlay {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(90deg, rgba(10,37,64,0.65) 0%, rgba(10,37,64,0.15) 100%);
-            z-index: 1;
+            background: linear-gradient(135deg, rgba(8,12,17,0.90) 0%, rgba(8,12,17,0.4) 100%); z-index: 1;
         }
         .hero .container { position: relative; z-index: 2; }
         
-        .hero-tag { display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; background: rgba(255, 255, 255, 0.1); color: #fff; border-radius: 100px; font-size: 0.875rem; font-weight: 600; margin-bottom: 32px; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2); }
-        .hero h1 { font-size: clamp(2.5rem, 6vw, 4.5rem); font-weight: 800; margin-bottom: 24px; max-width: 800px; color: white; }
-        .hero p { font-size: clamp(1rem, 3vw, 1.25rem); max-width: 600px; margin-bottom: 48px; color: rgba(255,255,255,0.8); }
-        
-        .btn-group { display: flex; gap: 16px; flex-wrap: wrap; }
-        .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 16px 32px; border-radius: 100px; font-weight: 600; font-size: 1rem; transition: all 0.3s ease; cursor: pointer; border: 2px solid transparent; width: 100%; max-width: 250px;}
-        .btn-primary { background: var(--accent); color: white; }
-        .btn-primary:hover { background: var(--accent-hover); box-shadow: 0 8px 20px rgba(0, 102, 255, 0.25); transform: translateY(-2px); }
-        .btn-secondary { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.3); color: white; backdrop-filter: blur(5px); }
-        .btn-secondary:hover { background: white; color: var(--primary); }
-
-        /* Video Showcase Section */
-        .video-section { padding: 100px 0; background: var(--surface); }
-        .video-wrapper {
-            position: relative; width: 100%; border-radius: var(--radius-lg); overflow: hidden;
-            box-shadow: var(--shadow-md); aspect-ratio: 16/9; background: #000;
+        .hero-tag { 
+            display: inline-flex; align-items: center; gap: 12px; padding: 10px 24px; 
+            background: rgba(212, 175, 55, 0.08); color: var(--accent); border-radius: 100px; 
+            font-size: 0.75rem; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; 
+            text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 40px; 
+            backdrop-filter: blur(10px); border: 1px solid rgba(212, 175, 55, 0.2); 
         }
+        /* Mobile-friendly clamp scale */
+        .hero h1 { font-size: clamp(2.8rem, 8vw, 6.5rem); font-weight: 500; margin-bottom: 30px; max-width: 1000px; color: white; letter-spacing: -0.01em; line-height: 1.15;}
+        .hero p { font-size: clamp(1rem, 3vw, 1.4rem); max-width: 700px; margin-bottom: 50px; color: rgba(255,255,255,0.7); font-weight: 300; line-height: 1.7;}
+        
+        .btn-group { display: flex; gap: 20px; flex-wrap: wrap; }
+        .btn { 
+            display: inline-flex; align-items: center; justify-content: center; gap: 12px; 
+            padding: 20px 42px; border-radius: var(--radius-sm); font-family: 'Plus Jakarta Sans', sans-serif;
+            font-weight: 600; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.1em;
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1); cursor: pointer; border: 1px solid transparent; 
+        }
+        .btn-primary { background: var(--accent); color: var(--primary); border-color: var(--accent); }
+        .btn-primary:hover { background: transparent; color: var(--accent); transform: translateY(-4px); box-shadow: var(--shadow-gold); }
+        .btn-secondary { background: transparent; border-color: rgba(255,255,255,0.3); color: white; backdrop-filter: blur(5px); }
+        .btn-secondary:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-4px); }
+
+        /* Clients Section */
+        .clients-section { padding: 90px 0; background: var(--surface); border-bottom: 1px solid rgba(0,0,0,0.03); }
+        .clients-section .section-header { margin-bottom: 50px; text-align: center; margin-left: auto; margin-right: auto; }
+        .clients-section .section-header h5 { justify-content: center; }
+        .clients-section .section-header h5::after { display: none; }
+        .client-grid { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: clamp(30px, 6vw, 100px); opacity: 0.8; }
+        .client-logo { display: flex; align-items: center; gap: 10px; font-family: 'Plus Jakarta Sans', sans-serif; font-size: clamp(1.2rem, 3vw, 1.5rem); font-weight: 700; color: #9CA3AF; letter-spacing: 0.05em; transition: all 0.5s ease; filter: grayscale(100%); cursor: pointer; }
+        .client-logo i { font-size: clamp(1.8rem, 4vw, 2.2rem); }
+        .client-logo img { max-height: 40px; width: auto; object-fit: contain; }
+        .client-logo:hover { color: var(--accent); filter: grayscale(0%); transform: scale(1.05); opacity: 1; }
+
+        /* Video Showcase */
+        .video-section { padding-top: 130px; padding-bottom: 0; background: var(--background); }
+        .video-wrapper { position: relative; width: 100%; overflow: hidden; border-radius: var(--radius-md); box-shadow: var(--shadow-soft); aspect-ratio: 16/9; background: #000; }
         .video-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
+
+        /* Leadership */
+        #leadership { background: var(--background); }
+        .founder-layout { display: flex; gap: 80px; align-items: center; }
+        .founder-image-wrapper { position: relative; flex: 1; border-radius: var(--radius-sm); overflow: hidden; height: 650px; }
+        .founder-image-wrapper img { width: 100%; height: 100%; object-fit: cover; filter: sepia(20%) hue-rotate(-10deg) saturate(80%); transition: all 0.8s ease; }
+        .founder-image-wrapper:hover img { filter: none; transform: scale(1.03); }
+        .founder-image-wrapper::after { content: ''; position: absolute; top: 20px; left: 20px; right: 20px; bottom: 20px; border: 1px solid rgba(212, 175, 55, 0.4); z-index: 2; pointer-events: none; transition: all 0.8s ease; }
+        .founder-image-wrapper:hover::after { top: 10px; left: 10px; right: 10px; bottom: 10px; border-color: var(--accent); }
         
-        /* Section Global */
-        section { padding: 100px 0; }
-        .section-header { margin-bottom: 64px; max-width: 700px; }
-        .section-header h2 { font-size: clamp(2rem, 4vw, 3rem); margin-bottom: 20px; }
-        .section-header p { font-size: 1.125rem; }
+        .founder-content { flex: 1; position: relative; }
+        .founder-content::before { content: '"'; position: absolute; top: -60px; left: -30px; font-family: 'Playfair Display', serif; font-size: 150px; color: rgba(212, 175, 55, 0.1); z-index: 0; line-height: 1; }
+        .founder-quote { position: relative; z-index: 1; font-size: clamp(1.2rem, 3vw, 1.55rem); font-family: 'Playfair Display', serif; font-style: italic; line-height: 1.6; color: var(--text-main); margin-bottom: 45px; }
+        .founder-signature { font-family: 'Playfair Display', serif; font-size: clamp(1.8rem, 4vw, 2.2rem); color: var(--primary); margin-bottom: 8px; font-weight: 500; }
+        .founder-title { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.15em; color: var(--accent); font-weight: 700; }
 
-        /* Fluid Grids - using min() for extreme mobile safety */
-        .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 350px), 1fr)); gap: 40px; }
-        .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: 32px; }
+        /* Services */
+        .card { background: var(--surface); border: 1px solid rgba(0,0,0,0.04); border-radius: var(--radius-sm); overflow: hidden; transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); display: flex; flex-direction: column; box-shadow: 0 4px 20px rgba(0,0,0,0.02); }
+        .card:hover { border-color: var(--gold-border); box-shadow: var(--shadow-gold); transform: translateY(-12px); }
+        .card-img-wrapper { width: 100%; height: 280px; overflow: hidden; position: relative; }
+        .card-img-wrapper img { width: 100%; height: 100%; transition: transform 1s ease; filter: brightness(0.9) grayscale(20%); object-fit: cover; }
+        .card:hover .card-img-wrapper img { transform: scale(1.1); filter: brightness(1) grayscale(0%); }
+        .card-content { padding: 50px 40px; flex-grow: 1; display: flex; flex-direction: column; background: var(--surface); position: relative; }
+        .card-icon-floating { position: absolute; top: -35px; left: 40px; width: 70px; height: 70px; background: var(--primary); color: var(--accent); display: flex; align-items: center; justify-content: center; font-size: 1.6rem; z-index: 10; border-radius: var(--radius-sm); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+        .card h3 { font-size: 1.7rem; margin-bottom: 18px; margin-top: 15px; font-weight: 600; }
+        .card p { font-weight: 300; font-size: 1.05rem; }
+        .card-meta { margin-top: auto; padding-top: 30px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; color: var(--text-muted); }
 
-        /* Image Cards (Services) */
-        .card {
-            background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg);
-            overflow: hidden; transition: all 0.4s ease; display: flex; flex-direction: column;
+        /* Experts Section */
+        .expert-section { 
+            background-color: var(--primary);
+            background-image: linear-gradient(rgba(8,12,17,0.75), rgba(8,12,17,0.80)), url('namche-bazaar-village-way-everest-base-camp-khumbu-region-nepal-himalaya.jpg');
+            background-size: cover; background-position: center; background-attachment: fixed;
+            color: white; position: relative; border-top: 1px solid rgba(212, 175, 55, 0.15); border-bottom: 1px solid rgba(212, 175, 55, 0.15); 
         }
-        .card:hover { border-color: transparent; box-shadow: var(--shadow-hover); transform: translateY(-8px); }
-        
-        .card-img-wrapper { width: 100%; height: 220px; overflow: hidden; position: relative; }
-        .card-img-wrapper img { width: 100%; height: 100%; transition: transform 0.6s ease; filter: brightness(0.95); object-fit: cover; }
-        .card:hover .card-img-wrapper img { transform: scale(1.05); filter: brightness(1); }
-        
-        .card-content { 
-            position: relative;
-            padding: 40px 32px 32px; flex-grow: 1; display: flex; flex-direction: column; 
-            background: var(--surface);
-        }
-
-        .card-icon-floating {
-            position: absolute; 
-            top: -36px; 
-            left: 24px; 
-            width: 72px; 
-            height: 72px;
-            background: var(--surface); 
-            color: var(--accent); 
-            border-radius: 20px 20px 20px 0; 
-            display: flex; align-items: center; justify-content: center; font-size: 1.75rem;
-            z-index: 10;
-        }
-
-        .card h3 { font-size: 1.35rem; margin-bottom: 12px; margin-top: 8px; }
-        .card-meta {
-            margin-top: auto; padding-top: 24px; border-top: 1px solid var(--border);
-            display: flex; justify-content: space-between; align-items: center;
-            font-size: 0.875rem; font-weight: 600; color: var(--text-main);
-        }
-
-        /* Experts Layout */
-        .expert-section { background: var(--primary); color: white; }
+        .expert-section .container { position: relative; z-index: 1; }
         .expert-section h2 { color: white; }
-        .expert-section p { color: rgba(255,255,255,0.7); }
-        .expert-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 24px; }
-        .expert-item { padding: 32px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: var(--radius-md); backdrop-filter: blur(10px); transition: background 0.3s; }
-        .expert-item:hover { background: rgba(255,255,255,0.1); }
-        .expert-item h4 { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 12px; font-size: 1.1rem; color: white; line-height: 1.4;}
-        .expert-item i { color: var(--accent); margin-top: 4px; }
-        .expert-item p { font-size: 0.95rem; color: rgba(255,255,255,0.8); }
+        .expert-section p { color: rgba(255,255,255,0.8); }
+        .expert-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 35px; }
+        .expert-item { padding: 45px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); border-radius: var(--radius-sm); backdrop-filter: blur(12px); transition: all 0.5s ease; }
+        .expert-item:hover { background: rgba(255,255,255,0.08); border-color: rgba(212, 175, 55, 0.4); transform: translateY(-8px); box-shadow: 0 20px 40px -10px rgba(0,0,0,0.5); }
+        .expert-item h4 { display: flex; align-items: flex-start; gap: 16px; margin-bottom: 18px; font-size: 1.2rem; color: white; }
+        .expert-item i { color: var(--accent); font-size: 1.3rem; margin-top: 3px; }
+        .expert-item p { font-size: 0.95rem; color: rgba(255,255,255,0.7); font-weight: 300; line-height: 1.7; }
 
-        /* Testimonials with Images */
-        .testimonial { border: none; background: rgba(10, 37, 64, 0.03); padding: 40px; border-radius: var(--radius-lg); }
-        .testimonial p { font-size: 1.125rem; font-weight: 500; color: var(--primary); margin-bottom: 32px; font-style: italic; }
-        .author { display: flex; align-items: center; gap: 16px; }
-        .author-avatar { width: 56px; height: 56px; border-radius: 50%; overflow: hidden; border: 2px solid white; box-shadow: var(--shadow-sm); flex-shrink: 0;}
-        .author-avatar img { width: 100%; height: 100%; }
-        .author-info h4 { font-size: 1rem; margin-bottom: 4px; }
-        .author-info span { font-size: 0.875rem; color: var(--text-muted); }
+        /* Insights */
+        .insight-card { border-bottom: 1px solid var(--border); padding-bottom: 45px; transition: all 0.4s; }
+        .insight-card:hover { transform: translateX(10px); }
+        .insight-card:hover h3 { color: var(--accent); }
+        .insight-meta { font-size: 0.75rem; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; color: var(--accent); margin-bottom: 18px; text-transform: uppercase; letter-spacing: 0.15em; }
+        .insight-card h3 { font-size: 1.7rem; font-weight: 500;}
+        .insight-link { display: inline-flex; align-items: center; gap: 10px; margin-top: 25px; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.8rem; font-weight: 700; color: var(--text-main); text-transform: uppercase; letter-spacing: 0.1em; transition: color 0.4s; }
+        .insight-link:hover { color: var(--accent); }
 
-        /* Contact & FAQ Split */
-        .split-section { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
-        details { border-bottom: 1px solid var(--border); padding: 24px 0; }
-        summary { font-size: 1.125rem; font-weight: 600; color: var(--primary); cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; }
+        /* FAQ & Forms */
+        .split-section { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(40px, 8vw, 120px); align-items: start; }
+        details { border-bottom: 1px solid rgba(0,0,0,0.05); padding: 30px 0; }
+        summary { font-family: 'Playfair Display', serif; font-size: clamp(1.2rem, 3vw, 1.4rem); color: var(--primary); cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; font-weight: 500; }
         summary::-webkit-details-marker { display: none; }
-        summary::after { content: '\f067'; font-family: 'FontAwesome'; color: var(--accent); font-weight: 400; transition: transform 0.3s; }
-        details[open] summary::after { transform: rotate(45deg); }
-        .faq-content { padding-top: 16px; color: var(--text-muted); padding-right: 40px; }
+        summary::after { content: '\f067'; font-family: 'FontAwesome'; color: var(--accent); font-size: 1rem; transition: transform 0.5s ease; }
+        details[open] summary::after { transform: rotate(135deg); }
+        .faq-content { padding-top: 25px; color: var(--text-muted); font-weight: 300; padding-right: 40px; font-size: 1.05rem; }
 
-        /* Form */
-        .form-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: clamp(24px, 5vw, 48px); box-shadow: var(--shadow-md); }
-        .form-group { margin-bottom: 24px; }
-        .form-label { display: block; font-size: 0.875rem; font-weight: 600; color: var(--primary); margin-bottom: 8px; }
-        .form-control { width: 100%; padding: 16px; background: var(--background); border: 1px solid var(--border); border-radius: var(--radius-md); font-family: inherit; font-size: 1rem; transition: all 0.3s; }
-        .form-control:focus { outline: none; border-color: var(--accent); background: var(--surface); box-shadow: 0 0 0 4px rgba(0, 102, 255, 0.1); }
-
-        /* Footer */
-        footer { background: var(--primary); color: white; padding: 100px 0 40px; margin-top: 0; }
-       .footer-grid { 
-            display: grid; 
-            grid-template-columns: 1.5fr 1fr; 
-            gap: 64px; 
-            margin-bottom: 80px; 
+        .form-card { 
+            background-color: var(--primary);
+            background-image: linear-gradient(rgba(8,12,17,0.70), rgba(18,26,37,0.85)), url('ChatGPT Image Aug 21, 2026, 12_10_03 PM.png');
+            background-size: cover; background-position: center; border-radius: var(--radius-sm); 
+            padding: clamp(35px, 6vw, 70px); /* Scales well on mobile */
+            box-shadow: 0 30px 60px -15px rgba(0,0,0,0.4); color: white; position: relative; overflow: hidden; 
         }
-        .footer-logo img { height: 90px; filter: invert(1) brightness(2); margin-bottom: 24px; transition: opacity 0.3s; }
+        .form-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 3px; background: var(--accent); z-index: 2;}
+        .form-card * { position: relative; z-index: 2; } 
+        .form-group { margin-bottom: 30px; }
+        .form-label { display: block; font-size: 0.75rem; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; color: rgba(255,255,255,0.7); margin-bottom: 12px; }
+        /* Font size must be 16px (1rem) minimum on mobile inputs to prevent iOS auto-zoom */
+        .form-control { width: 100%; padding: 18px; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.15); border-radius: var(--radius-sm); font-family: inherit; font-size: 1rem; color: white; transition: all 0.4s; backdrop-filter: blur(5px); }
+        .form-control:focus { outline: none; border-color: var(--accent); background: rgba(0,0,0,0.6); box-shadow: 0 0 20px rgba(212, 175, 55, 0.15); }
+        .form-control::placeholder { color: rgba(255,255,255,0.3); }
+
+        /* Floating WhatsApp Button */
+        .whatsapp-float {
+            position: fixed; bottom: 40px; right: 40px; width: 65px; height: 65px;
+            background-color: #25d366; color: #FFF; border-radius: 50%; 
+            display: flex; align-items: center; justify-content: center; font-size: 32px;
+            box-shadow: 0px 10px 30px rgba(37, 211, 102, 0.4); z-index: 1000;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            animation: pulse-wa 2.5s infinite;
+        }
+        .whatsapp-float i { margin-top: 2px; margin-left: 2px; }
+        .whatsapp-float:hover {
+            transform: translateY(-8px) scale(1.05); box-shadow: 0px 15px 35px rgba(37, 211, 102, 0.6); color: white;
+            animation: none;
+        }
+
+        /* Back to Top Button */
+        .back-to-top {
+            position: fixed; bottom: -80px; right: 48px; width: 48px; height: 48px;
+            background-color: var(--accent); color: var(--primary); border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; font-size: 1.2rem;
+            box-shadow: var(--shadow-gold); z-index: 999; transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            opacity: 0; visibility: hidden;
+        }
+        .back-to-top.show { bottom: 120px; opacity: 1; visibility: visible; }
+        .back-to-top:hover { transform: translateY(-5px); background-color: var(--primary); color: var(--accent); border: 1px solid var(--accent); }
+
+        @keyframes pulse-wa {
+            0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.6); }
+            70% { box-shadow: 0 0 0 18px rgba(37, 211, 102, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
+        }
+
+        /* FOOTER */
+        footer { 
+            position: relative; background-color: var(--primary);
+            background-image: linear-gradient(rgba(8,12,17,0.85), rgba(8,12,17,0.90)), url('Basantapur.jpg');
+            background-size: cover; background-position: center; color: white; 
+            padding: 80px 0 30px; border-top: 1px solid rgba(255,255,255,0.05); 
+        }
+        footer .container { position: relative; z-index: 2; }
+        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 50px; margin-bottom: 50px; }
+        .footer-logo img { height: 100px; filter: invert(1) brightness(2); margin-bottom: 25px; transition: opacity 0.4s; }
         .footer-logo:hover img { opacity: 0.8; }
-        
-        .footer-text { color: #94A3B8; margin-bottom: 24px; }
-        .footer-col h4 { color: white; font-size: 1.125rem; margin-bottom: 24px; }
+        .footer-text { color: rgba(255,255,255,0.7); font-weight: 300; margin-bottom: 30px; font-size: 1.05rem; line-height: 1.7; max-width: 480px; }
+        .footer-col h4 { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.15em; color: white; margin-bottom: 30px; }
         .footer-col ul { list-style: none; }
-        .footer-col ul li { margin-bottom: 12px; }
-        .footer-col ul li a { color: #94A3B8; transition: color 0.3s; }
-        .footer-col ul li a:hover { color: white; }
-        .footer-bottom { border-top: 1px solid rgba(255,255,255,0.1); padding-top: 32px; display: flex; justify-content: space-between; align-items: center; color: #94A3B8; font-size: 0.875rem; }
-        .social-links { display: flex; gap: 16px; }
-        .social-links a { width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,0.05); display: flex; align-items: center; justify-content: center; transition: all 0.3s; }
-        .social-links a:hover { background: var(--accent); color: white; }
+        .footer-col ul li { margin-bottom: 18px; font-weight: 300; }
+        .footer-col ul li a { color: rgba(255,255,255,0.7); transition: color 0.4s; }
+        .footer-col ul li a:hover { color: var(--accent); }
+        .footer-bottom { 
+            border-top: 1px solid rgba(255,255,255,0.08); padding-top: 30px; 
+            display: flex; justify-content: space-between; align-items: center; 
+            color: rgba(255,255,255,0.5); font-size: 0.85rem; font-weight: 300; flex-wrap: wrap; gap: 15px;
+        }
+        
+        .social-links { display: flex; gap: 15px; }
+        .social-links a { width: 45px; height: 45px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.15); display: flex; align-items: center; justify-content: center; transition: all 0.5s ease; color: white; background: rgba(0,0,0,0.2); backdrop-filter: blur(5px); }
+        .social-links a:hover { background: var(--accent); border-color: var(--accent); color: var(--primary); transform: translateY(-4px); }
 
         /* Animations */
         .reveal { opacity: 0; transform: translateY(40px); transition: 1s cubic-bezier(0.16, 1, 0.3, 1); }
         .reveal.active { opacity: 1; transform: translateY(0); }
-        .delay-1 { transition-delay: 0.1s; }
-        .delay-2 { transition-delay: 0.2s; }
+        .delay-1 { transition-delay: 0.15s; }
+        .delay-2 { transition-delay: 0.3s; }
 
-        /* ---- RESPONSIVE MEDIA QUERIES ---- */
-        @media (max-width: 992px) {
-            .split-section { grid-template-columns: 1fr; gap: 64px; }
-            .footer-grid { grid-template-columns: 1fr 1fr; gap: 48px; }
-            .btn-group .btn { max-width: none; width: auto; }
+        /* =========================================
+           MOBILE RESPONSIVE QUERIES 
+           ========================================= */
+        
+        @media (max-width: 1024px) {
+            .founder-layout { flex-direction: column; gap: 50px; }
+            .founder-image-wrapper { height: 450px; width: 100%; }
+            .split-section { grid-template-columns: 1fr; gap: 60px; }
+            section { padding: 100px 0; }
+            .section-header { margin-bottom: 60px; }
         }
         
         @media (max-width: 768px) {
-            /* Mobile Navigation */
+            /* Navbar adjustments */
+            nav { padding: 15px 0; }
             .menu-toggle { display: block; }
             .nav-links {
-                position: fixed; top: 0; right: -100%; width: 280px; height: 100vh;
+                position: fixed; top: 0; right: -100%; width: 100%; max-width: 320px; height: 100vh;
                 background: var(--surface); flex-direction: column; padding-top: 100px;
-                transition: right 0.4s cubic-bezier(0.16, 1, 0.3, 1); box-shadow: -10px 0 30px rgba(0,0,0,0.1);
-                align-items: flex-start; padding-left: 32px; z-index: 100;
+                transition: right 0.5s cubic-bezier(0.16, 1, 0.3, 1); box-shadow: -20px 0 50px rgba(0,0,0,0.1);
+                align-items: flex-start; padding-left: 40px; z-index: 100;
             }
             .nav-links.active { right: 0; }
-            .nav-links a { color: var(--text-main) !important; font-size: 1.1rem; width: 100%; margin-bottom: 16px; }
+            .nav-links a { color: var(--text-main) !important; font-size: 1rem; width: 100%; margin-bottom: 25px; }
             .nav-links a::after { left: 0; transform: none; }
-            .nav-cta { margin-top: 10px; display: inline-block; text-align: center; width: auto !important; margin-left: -5px;}
+            .nav-cta { margin-top: 20px; display: inline-block; text-align: center; width: calc(100% - 40px) !important; margin-left: 0;}
             
-            /* Logo resizing for small screens */
-            .logo img { height: 45px; }
-            .logo-main { font-size: 0.95rem; }
-            .logo-sub { font-size: 0.55rem; }
-            #navbar.scrolled .logo img { height: 40px; }
-
-            /* Hamburger color management */
+            .logo img { height: 50px; }
+            .logo-main { font-size: 1rem; }
+            .logo-sub { font-size: 0.6rem; }
+            #navbar.scrolled .logo img { height: 45px; }
             .menu-toggle.active { color: var(--primary) !important; position: fixed; right: 5%; }
             
-            /* Mobile Layout Adjustments */
-            .hero { padding-top: 140px; text-align: center; min-height: 80vh; }
-            .hero-tag { margin: 0 auto 24px; font-size: 0.75rem; }
-            .hero p { margin: 0 auto 32px; font-size: 1rem; }
-            .btn-group { justify-content: center; flex-direction: column; width: 100%; }
-            .btn-group .btn { width: 100%; max-width: none; }
+            /* Section layout adjustments */
+            section { padding: 70px 0; }
+            .section-header { margin-bottom: 45px; }
+            .grid-2, .grid-3 { gap: 30px; }
             
-            section { padding: 60px 0; }
-            .section-header { margin-bottom: 40px; }
+            /* Hero adjustments */
+            .hero { padding: 150px 0 80px; min-height: 80vh; text-align: left; } /* Kept left aligned for better text wrapping */
+            .hero h1 { margin-bottom: 20px; }
+            .hero p { margin-bottom: 40px; font-size: 1.05rem; }
+            .btn-group { flex-direction: column; width: 100%; }
+            .btn-group .btn { width: 100%; }
             
-            .footer-grid { grid-template-columns: 1fr; gap: 40px; }
-            .footer-bottom { flex-direction: column; gap: 24px; text-align: center; }
-            .social-links { margin-top: 24px; }
+            /* Founder Image scaling down */
+            .founder-image-wrapper { height: 350px; }
+            .founder-content::before { font-size: 100px; top: -45px; left: -15px; }
+            
+            /* Footer adjustments */
+            footer { padding: 60px 0 30px; }
+            .footer-bottom { flex-direction: column; text-align: center; gap: 20px; }
+            
+            /* Shrink floating buttons slightly to save screen space */
+            .whatsapp-float { bottom: 20px; right: 20px; width: 55px; height: 55px; font-size: 28px; }
+            .back-to-top { right: 25px; width: 44px; height: 44px; font-size: 1.1rem; } 
+            .back-to-top.show { bottom: 90px; } /* Sits above the smaller WhatsApp button */
+        }
+
+        @media (max-width: 480px) {
+            /* Extra small phone tweaks */
+            .hero h1 { font-size: 2.5rem; }
+            .card-content { padding: 40px 25px 30px; }
+            .card-icon-floating { left: 25px; }
+            .expert-item { padding: 35px 25px; }
+            .form-card { padding: 35px 25px; }
+            .split-section { gap: 40px; }
+            .client-grid { gap: 30px; }
+            .client-logo i { font-size: 1.8rem; }
+            .client-logo { font-size: 1.1rem; }
         }
     </style>
 </head>
@@ -303,13 +389,13 @@
                 </div>
             </a>
             
-            <!-- Added Mobile Hamburger Icon -->
             <div class="menu-toggle" id="mobile-menu">
                 <i class="fas fa-bars"></i>
             </div>
 
             <div class="nav-links" id="nav-links">
                 <a href="#services">Practice Areas</a>
+                <a href="#leadership">Leadership</a>
                 <a href="#experts">Our Experts</a>
                 <a href="#knowledge">Insights</a>
                 <a href="#contact" class="nav-cta">Talk to an expert</a>
@@ -317,7 +403,7 @@
         </div>
     </nav>
 
-    <!-- Image Background Hero -->
+    <!-- Luxury Hero Section -->
     <section class="hero">
         <div class="hero-bg"></div>
         <div class="hero-overlay"></div>
@@ -326,10 +412,10 @@
                 <i class="fas fa-globe-asia"></i> Based in Nepal. Navigate to Excellence.
             </div>
             <h1>A consulting firm for everything.</h1>
-            <p>Chartered accountants, lawyers, policy drafters, environmental specialists, former senior officials, and veteran bankers — on one platform, accountable for the outcome.</p>
+            <p>Chartered accountants, lawyers, policy drafters, environmental specialists, former senior officials, and veteran bankers — consolidated on one premium platform, accountable for the outcome.</p>
             <div class="btn-group">
-                <a href="#contact" class="btn btn-primary">Initiate Consultation <i class="fas fa-arrow-right"></i></a>
-                <a href="#video-tour" class="btn btn-secondary"><i class="fas fa-play-circle"></i> Watch Profile</a>
+                <a href="#contact" class="btn btn-primary">Initiate Consultation</a>
+                <a href="#video-tour" class="btn btn-secondary"><i class="fas fa-play-circle" style="margin-right: 8px;"></i> Watch Corporate Profile</a>
             </div>
         </div>
     </section>
@@ -337,9 +423,10 @@
     <!-- Video Showcase Section -->
     <section id="video-tour" class="video-section">
         <div class="container">
-            <div class="section-header reveal text-center" style="margin: 0 auto 48px;">
+            <div class="section-header reveal text-center" style="margin: 0 auto 50px;">
+                <h5>Corporate Overview</h5>
                 <h2>See how we operate.</h2>
-                <p>A brief look into our multidisciplinary approach and corporate values.</p>
+                <p style="margin: 0 auto;">A look into our multidisciplinary approach and uncompromising standards.</p>
             </div>
             <div class="video-wrapper reveal delay-1">
                 <iframe src="https://www.youtube-nocookie.com/embed/ScMzIvxBSi4?controls=0&rel=0&autoplay=0&mute=1&loop=1&playlist=ScMzIvxBSi4" title="Corporate Video Placeholder" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
@@ -347,12 +434,54 @@
         </div>
     </section>
 
-    <!-- Media-Rich Services -->
-    <section id="services" style="background: var(--background);">
+    <!-- Our Clients Section -->
+    <section id="clients" class="clients-section">
         <div class="container">
             <div class="section-header reveal">
-                <h2>Every kind of advice, in one place.</h2>
-                <p>Our multidisciplinary framework ensures all aspects of your enterprise are managed seamlessly.</p>
+                <h5>Trusted By</h5>
+                <h2>Our Esteemed Clientele</h2>
+            </div>
+            <div class="client-grid reveal delay-1">
+                <div class="client-logo"><i class="fas fa-building"></i> Apex Holdings</div>
+                <div class="client-logo"><i class="fas fa-landmark"></i> NBL Financial</div>
+                <div class="client-logo"><i class="fas fa-industry"></i> K-Corp Infra</div>
+                <div class="client-logo"><i class="fas fa-hotel"></i> Summit Hospitality</div>
+                <div class="client-logo"><i class="fas fa-shield-halved"></i> Vanguard Trust</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Leadership / Founder Section -->
+    <section id="leadership">
+        <div class="container">
+            <div class="founder-layout">
+                <div class="founder-image-wrapper reveal">
+                    <img src="Gemini_Generated_Image_mebqh2mebqh2mebq.jpg" alt="Founder & Managing Director">
+                </div>
+                <div class="founder-content reveal delay-1">
+                    <div class="section-header" style="margin-bottom: 30px;">
+                        <h5>From the Desk of the Founder</h5>
+                        <h2>Excellence is not an act, but a habit.</h2>
+                    </div> 
+                    <p class="founder-quote">
+                        "We established Kalika Business Advisors to bridge the gap between global corporate standards and the localized intricacies of enterprise in Nepal. By consolidating the brightest legal, financial, and strategic minds under one roof, we provide solutions that are not merely theoretical, but flawlessly executed."
+                    </p>
+                    <div>
+                        <div class="founder-signature">Mr. Suman Mainali</div>
+                        <div class="founder-title">Founder & Managing Director</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Media-Rich Services -->
+    <section id="services" style="background: var(--surface);">
+        <div class="container">
+            <div class="section-header reveal">
+                <h5>Practice Areas</h5>
+                <h2>Bespoke advisory, unified.</h2>
+                <p>Our multidisciplinary framework ensures all elements of your enterprise are managed with absolute precision and harmony.</p>
             </div>
             <div class="grid-3">
                 
@@ -363,7 +492,7 @@
                     <div class="card-content">
                         <div class="card-icon-floating"><i class="fas fa-chart-pie"></i></div>
                         <h3>Accounting & Finance</h3>
-                        <p>Rigorous reporting, statutory audit, financial outsourcing, and the digital systems that produce them.</p>
+                        <p>Rigorous reporting, statutory audit, financial outsourcing, and enterprise-grade digital systems architecture.</p>
                         <div class="card-meta"><span>Division A</span> <i class="fas fa-arrow-right" style="color: var(--accent);"></i></div>
                     </div>
                 </div>
@@ -374,8 +503,8 @@
                     </div>
                     <div class="card-content">
                         <div class="card-icon-floating"><i class="fas fa-scale-balanced"></i></div>
-                        <h3>Tax, Legal & Regulatory</h3>
-                        <p>Company registration, complex licensing, strategic taxation, and foreign investment structuring.</p>
+                        <h3>Tax & Legal</h3>
+                        <p>Company registration, complex regulatory licensing, strategic taxation, and foreign investment structuring.</p>
                         <div class="card-meta"><span>Division B</span> <i class="fas fa-arrow-right" style="color: var(--accent);"></i></div>
                     </div>
                 </div>
@@ -387,7 +516,7 @@
                     <div class="card-content">
                         <div class="card-icon-floating"><i class="fas fa-building-columns"></i></div>
                         <h3>Governance & Policy</h3>
-                        <p>Corporate bylaws, policy drafting, regulatory advocacy, spearheaded by former officials.</p>
+                        <p>Corporate bylaws, high-level policy drafting, and executive regulatory advocacy, spearheaded by former officials.</p>
                         <div class="card-meta"><span>Division C</span> <i class="fas fa-arrow-right" style="color: var(--accent);"></i></div>
                     </div>
                 </div>
@@ -396,126 +525,87 @@
         </div>
     </section>
 
-    <!-- UPDATED: Experts with 2 new additions -->
+    <!-- Experts Section -->
     <section id="experts" class="expert-section">
         <div class="container">
-            <div class="section-header reveal">
-                <h2>One platform, many minds.</h2>
-                <p>We combine highly specialized veterans from across the industry spectrum into a single, unified advisory team.</p>
+            <div class="section-header reveal text-center" style="margin: 0 auto 60px;">
+                <h5 style="color: var(--accent); justify-content: center;">Our Roster</h5>
+                <h2>One platform, exceptional minds.</h2>
+                <p style="margin: 0 auto;">We combine highly specialized veterans from across the industry spectrum into a single, formidable advisory force.</p>
             </div>
             <div class="expert-grid">
-                <div class="expert-item reveal"><h4 style="color: white;"><i class="fas fa-calculator"></i> Chartered Accountants</h4><p>Financial reporting, audit, tax, and assurance — including strict NFRS conversion protocols.</p></div>
-                <div class="expert-item reveal"><h4 style="color: white;"><i class="fas fa-gavel"></i> Legal Advisors</h4><p>Corporate, commercial, and regulatory law; managing complex contracts and corporate governance.</p></div>
-                <div class="expert-item reveal"><h4 style="color: white;"><i class="fas fa-scroll"></i> Policy Drafters</h4><p>Drafting of laws, regulations, and policies, navigating the parliamentary and regulatory processes.</p></div>
-                <div class="expert-item reveal"><h4 style="color: white;"><i class="fas fa-landmark"></i> Former Senior Officials</h4><p>High-ranking ex-bureaucrats providing deep institutional knowledge of how government agencies decide.</p></div>
-                <div class="expert-item reveal"><h4 style="color: white;"><i class="fas fa-leaf"></i> Environmental Specialists</h4><p>EIA, IEE, rigorous environmental compliance monitoring, and ESG advisory for infrastructure projects.</p></div>
-                <div class="expert-item reveal"><h4 style="color: white;"><i class="fas fa-briefcase"></i> Bankers & Finance</h4><p>Specialists in project finance, debt structuring, and capital markets.</p></div>
-                
-                <!-- NEW ITEMS HERE -->
-                <div class="expert-item reveal"><h4 style="color: white;"><i class="fas fa-bullseye"></i> Strategy & Management Consultants</h4><p>Organizational design, business planning, and operational efficiency for growth-stage and turnaround initiatives.</p></div>
-                <div class="expert-item reveal"><h4 style="color: white;"><i class="fas fa-laptop-code"></i> Technology & Digital Transformation Advisors</h4><p>IT systems architecture, digital infrastructure planning, and technology risk management for large-scale modernization.</p></div>
+                <div class="expert-item reveal"><h4><i class="fas fa-calculator"></i> Chartered Accountants</h4><p>Financial reporting, audit, tax, and assurance — executing strict NFRS conversion protocols.</p></div>
+                <div class="expert-item reveal delay-1"><h4><i class="fas fa-gavel"></i> Legal Advisors</h4><p>Corporate, commercial, and regulatory law; orchestrating complex contracts and governance.</p></div>
+                <div class="expert-item reveal delay-2"><h4><i class="fas fa-scroll"></i> Policy Drafters</h4><p>Drafting of laws, regulations, and policies, navigating the highest tiers of parliamentary processes.</p></div>
+                <div class="expert-item reveal"><h4><i class="fas fa-landmark"></i> Senior Officials</h4><p>High-ranking ex-bureaucrats providing unmatched institutional knowledge of government mechanics.</p></div>
+                <div class="expert-item reveal delay-1"><h4><i class="fas fa-leaf"></i> Environmental Specialists</h4><p>EIA, IEE, rigorous environmental compliance monitoring, and ESG advisory for megaprojects.</p></div>
+                <div class="expert-item reveal delay-2"><h4><i class="fas fa-briefcase"></i> Bankers & Finance</h4><p>Specialists in project finance, multi-tiered debt structuring, and advanced capital markets.</p></div>
+                <div class="expert-item reveal"><h4><i class="fas fa-bullseye"></i> Strategy Consultants</h4><p>Organizational design, high-stakes business planning, and operational efficiency initiatives.</p></div>
+                <div class="expert-item reveal delay-1"><h4><i class="fas fa-laptop-code"></i> Technology Advisors</h4><p>Enterprise IT systems architecture, digital infrastructure, and large-scale tech modernization.</p></div>
             </div>
         </div>
     </section>
 
    <!-- Regulatory Updates -->
-    <section id="knowledge" style="background: white;">
+    <section id="knowledge" style="background: var(--background);">
         <div class="container">
             <div class="section-header reveal">
-                <h2>Insights & Regulatory Updates</h2>
+                <h5>Intellectual Capital</h5>
+                <h2>Insights & Updates</h2>
                 <p>Direct integration with the latest guidelines and statutory changes from Nepal's governing bodies.</p>
             </div>
             <div class="grid-3">
                 
-                <!-- Department of Commerce -->
-                <div class="card reveal" style="padding: 0; border: none; box-shadow: none;">
-                    <div class="card-img-wrapper" style="border-radius: var(--radius-md); height: 200px; margin-bottom: 24px;">
-                        <img src="https://images.unsplash.com/photo-1554224154-22dec7ec8818?q=80&w=800&auto=format&fit=crop" alt="Department of Commerce">
-                    </div>
-                    <div style="font-size: 0.85rem; font-weight: 700; color: var(--accent); margin-bottom: 12px; text-transform: uppercase;">Portal Link • doc.gov.np</div>
-                    <h3 style="font-size: 1.35rem; margin-bottom: 12px; cursor: pointer;">Department of Commerce Updates</h3>
-                    <p>Track the newest consumer protection guidelines, supply chain notices, and commercial regulations directly from the DOC.</p>
-                    <a href="https://www.doc.gov.np/" target="_blank" style="display: inline-block; margin-top: 15px; color: var(--accent); font-weight: 600;">Visit Official Website <i class="fas fa-external-link-alt" style="margin-left: 5px; font-size: 0.8rem;"></i></a>
+                <div class="insight-card reveal">
+                    <div class="insight-meta">Department of Commerce • doc.gov.np</div>
+                    <h3>Commerce Guidelines</h3>
+                    <p style="font-weight: 300;">Track the newest consumer protection mandates, supply chain notices, and commercial regulations.</p>
+                    <a href="https://www.doc.gov.np/" target="_blank" class="insight-link">Visit Official Portal <i class="fas fa-arrow-right"></i></a>
                 </div>
 
-                <!-- Office of the Company Registrar -->
-                <div class="card reveal delay-1" style="padding: 0; border: none; box-shadow: none;">
-                    <div class="card-img-wrapper" style="border-radius: var(--radius-md); height: 200px; margin-bottom: 24px;">
-                        <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?q=80&w=800&auto=format&fit=crop" alt="Company Registrar">
-                    </div>
-                    <div style="font-size: 0.85rem; font-weight: 700; color: var(--accent); margin-bottom: 12px; text-transform: uppercase;">Portal Link • ocr.gov.np</div>
-                    <h3 style="font-size: 1.35rem; margin-bottom: 12px; cursor: pointer;">Office of the Company Registrar</h3>
-                    <p>Stay informed on corporate compliance mandates, share structure amendments, and official filing deadline extensions.</p>
-                    <a href="https://ocr.gov.np/" target="_blank" style="display: inline-block; margin-top: 15px; color: var(--accent); font-weight: 600;">Visit Official Website <i class="fas fa-external-link-alt" style="margin-left: 5px; font-size: 0.8rem;"></i></a>
+                <div class="insight-card reveal delay-1">
+                    <div class="insight-meta">Company Registrar • ocr.gov.np</div>
+                    <h3>Corporate Compliance</h3>
+                    <p style="font-weight: 300;">Stay informed on corporate compliance mandates, share structure amendments, and filing extensions.</p>
+                    <a href="https://ocr.gov.np/" target="_blank" class="insight-link">Visit Official Portal <i class="fas fa-arrow-right"></i></a>
                 </div>
 
-                <!-- Inland Revenue Department -->
-                <div class="card reveal delay-2" style="padding: 0; border: none; box-shadow: none;">
-                    <div class="card-img-wrapper" style="border-radius: var(--radius-md); height: 200px; margin-bottom: 24px;">
-                        <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=800&auto=format&fit=crop" alt="Inland Revenue Department">
-                    </div>
-                    <div style="font-size: 0.85rem; font-weight: 700; color: var(--accent); margin-bottom: 12px; text-transform: uppercase;">Portal Link • ird.gov.np</div>
-                    <h3 style="font-size: 1.35rem; margin-bottom: 12px; cursor: pointer;">Inland Revenue Department</h3>
-                    <p>Access the latest tax brackets, VAT notices, budget amendments, and internal revenue directives as soon as they drop.</p>
-                    <a href="https://ird.gov.np/" target="_blank" style="display: inline-block; margin-top: 15px; color: var(--accent); font-weight: 600;">Visit Official Website <i class="fas fa-external-link-alt" style="margin-left: 5px; font-size: 0.8rem;"></i></a>
+                <div class="insight-card reveal delay-2">
+                    <div class="insight-meta">Inland Revenue • ird.gov.np</div>
+                    <h3>Taxation & Revenue</h3>
+                    <p style="font-weight: 300;">Access the latest tax brackets, VAT notices, budget amendments, and internal revenue directives.</p>
+                    <a href="https://ird.gov.np/" target="_blank" class="insight-link">Visit Official Portal <i class="fas fa-arrow-right"></i></a>
                 </div>
 
-            </div>
-        </div>
-    </section>
-    
-    <!-- Testimonials with Client Avatars -->
-    <section id="testimonials" style="background: var(--background);">
-        <div class="container">
-            <div class="section-header reveal text-center" style="margin: 0 auto 64px;">
-                <h2>What our clients say.</h2>
-            </div>
-            <div class="grid-2">
-                <div class="testimonial reveal">
-                    <p>"I'd been filing VAT returns for three years and still learned things I'd been getting wrong. The reconciliation session alone paid for the course."</p>
-                    <div class="author">
-                        <div class="author-avatar"><img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=200&auto=format&fit=crop" alt="Sita Sharma"></div>
-                        <div class="author-info">
-                            <h4>Sita Sharma</h4><span>Finance Manager, Himalaya Traders</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="testimonial reveal delay-1">
-                    <p>"Practical rather than theoretical. The operational templates provided went straight into our firm's workflow the very same week."</p>
-                    <div class="author">
-                        <div class="author-avatar"><img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=200&auto=format&fit=crop" alt="Rajesh Thapa"></div>
-                        <div class="author-info">
-                            <h4>Rajesh Thapa</h4><span>Partner, Thapa & Associates</span>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     </section>
 
     <!-- FAQ & Newsletter -->
-    <section id="faq" style="background: white;">
+    <section id="faq" style="background: var(--surface);">
         <div class="container">
             <div class="split-section">
                 <div class="reveal">
-                    <h2 style="margin-bottom: 40px; font-size: clamp(2rem, 4vw, 2.5rem);">Questions,<br>answered.</h2>
-                    <details><summary>Are the classes live or pre-recorded?</summary><div class="faq-content">We utilize a hybrid model. Core conceptual modules are pre-recorded for high production value, supplemented by live interactive Q&A sessions.</div></details>
-                    <details><summary>How long do I keep access to the recordings?</summary><div class="faq-content">Participants receive lifetime access to purchased course materials.</div></details>
-                    <details><summary>How do I handle billing?</summary><div class="faq-content">We accept major digital wallets (eSewa, Khalti), direct bank transfers, and standard international credit/debit cards.</div></details>
+                    <div class="section-header" style="margin-bottom: 30px;">
+                        <h5>Clarity & Transparency</h5>
+                        <h2>Questions, answered.</h2>
+                    </div>
+                    <details><summary>How do you structure your engagements?</summary><div class="faq-content">We operate on retained advisory, project-based mandates, and strategic partnerships, tailored entirely to the scale and complexity of your requirements.</div></details>
+                    <details><summary>Is client confidentiality absolute?</summary><div class="faq-content">Yes. We adhere to the strictest global standards of data security and attorney-client style privilege across all our practice areas.</div></details>
+                    <details><summary>Do you handle international investments?</summary><div class="faq-content">Extensively. Our legal and financial teams specialize in FDI structuring, cross-border tax compliance, and repatriation strategies.</div></details>
                 </div>
                 <div class="reveal delay-1">
                     <div class="form-card">
-                        <h3 style="font-size: 1.75rem; margin-bottom: 16px;">Get the Newsletter</h3>
-                        <p style="margin-bottom: 32px; font-size: 0.95rem;">Budget changes, critical filing deadlines, and new regulatory guides — no more than one email at a time. No marketing spam.</p>
-                      <form id="newsletter-form" action="YOUR_FORMSPREE_ENDPOINT" method="POST">
+                        <h3 style="font-size: 2.2rem; margin-bottom: 20px; font-family: 'Playfair Display', serif; color: var(--accent);">Private Briefing</h3>
+                        <p style="margin-bottom: 35px; font-weight: 300; color: rgba(255,255,255,0.9); line-height: 1.7;">Budget changes, critical deadlines, and exclusive regulatory guides delivered directly to your professional inbox.</p>
+                        <form id="newsletter-form" action="YOUR_FORMSPREE_ENDPOINT" method="POST">
                             <div class="form-group">
-                                <label class="form-label" for="email-input">Professional Email</label>
-                                <input type="email" id="email-input" name="email" class="form-control" placeholder="name@company.com" required>
+                                <label class="form-label" for="email-input">Corporate Email</label>
+                                <input type="email" id="email-input" name="email" class="form-control" placeholder="executive@company.com" required>
                             </div>
-                            <button type="submit" id="submit-btn" class="btn btn-primary" style="width: 100%;">Subscribe to Updates</button>
+                            <button type="submit" id="submit-btn" class="btn btn-primary" style="width: 100%;">Subscribe to Intelligence</button>
                             
-                            <!-- This will display the success/error message -->
-                            <div id="form-message" style="margin-top: 16px; font-size: 0.9rem; font-weight: 600; display: none;"></div>
+                            <div id="form-message" style="margin-top: 20px; font-size: 0.95rem; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 600; display: none;"></div>
                         </form>
                     </div>
                 </div>
@@ -529,46 +619,38 @@
             <div class="footer-grid">
                 <!-- Company Info & Logo -->
                 <div>
-                    <a href="#" class="logo footer-logo" style="margin-bottom: 24px; display: inline-block;">
-                       <img src="logo.png" alt="Kalika Business Advisors Logo" style="height: 90px; filter: invert(1) brightness(2);"> 
+                    <a href="#" class="logo footer-logo" style="display: inline-block;">
+                       <img src="logo.png" alt="Kalika Business Advisors Logo"> 
                     </a>
-                    <p class="footer-text" style="max-width: 450px;">Whatever the problem, the right expert is already here. Based in Nepal, operating to global standards.</p>
-                  <div class="social-links">
+                    <p class="footer-text">Whatever the complication, the highest caliber of expertise is already here. Based in Nepal, operating to global standards.</p>
+                    <div class="social-links">
                         <a href="https://www.facebook.com/profile.php?id=61559917775120" target="_blank" rel="noopener noreferrer"><i class="fab fa-facebook-f"></i></a>
                         <a href="https://www.tiktok.com/@kalika.business.a" target="_blank" rel="noopener noreferrer"><i class="fab fa-tiktok"></i></a>
                         <a href="https://wa.me/9779851332422" target="_blank" rel="noopener noreferrer"><i class="fab fa-whatsapp"></i></a>
                     </div>
                 </div>
 
-                <!-- Contact & Office Location -->
+                <!-- Contact Info -->
                 <div class="footer-col">
-                    <h4>Contact Info & Location</h4>
-                    <ul style="color: #94A3B8; font-size: 0.95rem; list-style: none;">
-                        <!-- Head Office Location -->
-                        <li style="margin-bottom: 20px; display: flex; gap: 12px; align-items: flex-start;">
-                            <i class="fas fa-map-marker-alt" style="color: var(--accent); margin-top: 4px; font-size: 1.2rem;"></i>
+                    <h4>Corporate Headquarters</h4>
+                    <ul style="color: rgba(255,255,255,0.6); font-size: 1rem;">
+                        <li style="margin-bottom: 25px; display: flex; gap: 15px; align-items: flex-start;">
+                            <i class="fas fa-map-marker-alt" style="color: var(--accent); margin-top: 5px; font-size: 1.3rem;"></i>
                             <div>
-                                <strong style="color: white; font-weight: 600; display: block; margin-bottom: 4px;">Head Office</strong>
-                                Kathmandu<br>
-                                Bagmati Province, Nepal
-                                <a href="https://maps.app.goo.gl/jbJRSBuCyem1zsfs9" target="_blank" style="display: block; margin-top: 6px; color: var(--accent); font-size: 0.85rem; font-weight: 600;">
-                                    View on Google Maps <i class="fas fa-arrow-right" style="font-size: 0.75rem; margin-left: 4px;"></i>
+                                <strong style="color: white; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 600; display: block; margin-bottom: 6px;">Kathmandu Office</strong>
+                                Bagmati Province, Nepal<br>
+                                <a href="https://maps.app.goo.gl/jbJRSBuCyem1zsfs9" target="_blank" style="display: inline-block; margin-top: 10px; color: var(--accent); font-size: 0.8rem; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em;">
+                                    View on Maps <i class="fas fa-arrow-right" style="margin-left: 6px;"></i>
                                 </a>
                             </div>
                         </li>
-
-                        <!-- Phone Numbers -->
-                        <li style="display: flex; gap: 12px; align-items: flex-start; margin-bottom: 16px;">
-                            <i class="fas fa-phone-alt" style="color: var(--accent); margin-top: 4px; font-size: 1.1rem; width: 16px; text-align: center;"></i>
-                            <div>
-                                <span style="color: white; display: block;">+977 9851332422</span>
-                            </div>
+                        <li style="display: flex; gap: 15px; align-items: flex-start; margin-bottom: 20px;">
+                            <i class="fas fa-phone-alt" style="color: var(--accent); margin-top: 5px; font-size: 1.15rem; width: 16px; text-align: center;"></i>
+                            <span style="color: white;">+977 9851332422</span>
                         </li>
-
-                        <!-- Email -->
-                        <li style="display: flex; gap: 12px; align-items: center;">
-                            <i class="fas fa-envelope" style="color: var(--accent); font-size: 1.1rem; width: 16px; text-align: center;"></i>
-                            <a href="mailto:doctorbusiness6@gmail.com" style="color: white; transition: color 0.3s;">doctorbusiness6@gmail.com</a>
+                        <li style="display: flex; gap: 15px; align-items: center;">
+                            <i class="fas fa-envelope" style="color: var(--accent); font-size: 1.15rem; width: 16px; text-align: center;"></i>
+                            <a href="mailto:doctorbusiness6@gmail.com" style="color: white;">doctorbusiness6@gmail.com</a>
                         </li>
                     </ul>
                 </div>
@@ -577,25 +659,54 @@
            <div class="footer-bottom">
                 <div>&copy; 2026 Kalika Business Advisors and Navigators Pvt. Ltd. All rights reserved.</div>
                 <div>
-                    Navigate to Excellence. | Developed by <a href="https://satishchandrakarki.com.np/" target="_blank" style="color: var(--accent); text-decoration: none; font-weight: 600; transition: color 0.3s;" onmouseover="this.style.color='white'" onmouseout="this.style.color='var(--accent)'">Satish Chandra Karki</a>
+                    Navigate to Excellence. | Developed by <a href="https://satishchandrakarki.com.np/" target="_blank" style="color: var(--accent); font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; transition: color 0.4s;" onmouseover="this.style.color='white'" onmouseout="this.style.color='var(--accent)'">Satish Chandra Karki</a>
                 </div>
             </div>
         </div>
     </footer>
     
+    <!-- Floating Back To Top Button -->
+    <a href="#" id="back-to-top" class="back-to-top" aria-label="Go to top">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+
+    <!-- Floating WhatsApp Button -->
+    <a href="https://wa.me/9779851332422" class="whatsapp-float" target="_blank" rel="noopener noreferrer">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
     <!-- Scripts -->
     <script>
-        // Navbar Scrolled State
+        // Navbar Scrolled State & Back To Top Button Logic
         const navbar = document.getElementById('navbar');
+        const backToTopBtn = document.getElementById('back-to-top');
+        
         window.addEventListener('scroll', () => {
-            if (window.scrollY > 50) {
+            // Navbar
+            if (window.scrollY > 60) {
                 navbar.classList.add('scrolled');
             } else {
                 navbar.classList.remove('scrolled');
             }
+
+            // Back to Top Button
+            if (window.scrollY > 400) {
+                backToTopBtn.classList.add('show');
+            } else {
+                backToTopBtn.classList.remove('show');
+            }
         });
 
-        // Hamburger Menu Toggle Logic
+        // Smooth Scroll for Back To Top
+        backToTopBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // Hamburger Menu Logic
         const mobileMenu = document.getElementById('mobile-menu');
         const navMenu = document.getElementById('nav-links');
         const menuIcon = mobileMenu.querySelector('i');
@@ -605,7 +716,6 @@
             navMenu.classList.toggle('active');
             mobileMenu.classList.toggle('active');
             
-            // Switch Icon between bars and close
             if(navMenu.classList.contains('active')) {
                 menuIcon.classList.remove('fa-bars');
                 menuIcon.classList.add('fa-times');
@@ -615,7 +725,6 @@
             }
         });
 
-        // Close mobile menu when a link is clicked
         navLinksList.forEach((link) => {
             link.addEventListener('click', () => {
                 navMenu.classList.remove('active');
@@ -625,8 +734,8 @@
             });
         });
 
-        // Intersection Observer for smooth reveal animations
-        const observerOptions = { root: null, rootMargin: '0px', threshold: 0.1 };
+        // Luxury Intersection Observer Reveal
+        const observerOptions = { root: null, rootMargin: '0px', threshold: 0.15 };
         const observer = new IntersectionObserver((entries, observer) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -638,40 +747,35 @@
 
         document.querySelectorAll('.reveal').forEach((el) => { observer.observe(el); });
 
-        // ScrollSpy functionality to track active section
+        // ScrollSpy
         const sections = document.querySelectorAll("section");
         const navLi = document.querySelectorAll(".nav-links a:not(.nav-cta)");
 
         window.addEventListener("scroll", () => {
             let current = "";
-
             sections.forEach((section) => {
                 const sectionTop = section.offsetTop;
-                // If the user has scrolled past the top of the section (with a 200px offset for the sticky navbar)
-                if (pageYOffset >= sectionTop - 200) {
+                if (pageYOffset >= sectionTop - 300) {
                     current = section.getAttribute("id");
                 }
             });
 
             navLi.forEach((a) => {
                 a.classList.remove("active");
-                // If the link's href matches the current section ID, add the active class
                 if (a.getAttribute("href") === `#${current}`) {
                     a.classList.add("active");
                 }
             });
         });
 
-       // Newsletter Form Submission Logic (using Formspree)
+        // Newsletter Form Logic
         const form = document.getElementById('newsletter-form');
         const submitBtn = document.getElementById('submit-btn');
         const formMessage = document.getElementById('form-message');
 
         form.addEventListener('submit', async function(e) {
             e.preventDefault(); 
-            
-            // UI Loading State
-            submitBtn.innerText = 'Subscribing...';
+            submitBtn.innerText = 'Processing...';
             submitBtn.disabled = true;
             formMessage.style.display = 'none';
 
@@ -681,15 +785,13 @@
                 const response = await fetch(form.action, {
                     method: form.method,
                     body: data,
-                    headers: {
-                        'Accept': 'application/json'
-                    }
+                    headers: { 'Accept': 'application/json' }
                 });
 
                 if (response.ok) {
                     formMessage.style.display = 'block';
-                    formMessage.style.color = '#0066FF'; 
-                    formMessage.innerText = 'Thank you! You have been successfully subscribed.';
+                    formMessage.style.color = '#D4AF37'; 
+                    formMessage.innerText = 'Thank you. You have been successfully added to our briefing list.';
                     form.reset(); 
                 } else {
                     const responseData = await response.json();
@@ -698,7 +800,7 @@
                     if (Object.hasOwn(responseData, 'errors')) {
                         formMessage.innerText = responseData["errors"].map(error => error["message"]).join(", ");
                     } else {
-                        formMessage.innerText = 'Oops! There was a problem submitting your form';
+                        formMessage.innerText = 'An error occurred. Please try again.';
                     }
                 }
             } catch (error) {
@@ -706,8 +808,7 @@
                 formMessage.style.color = '#EF4444';
                 formMessage.innerText = 'Network error. Please try again later.';
             } finally {
-                // Reset UI State
-                submitBtn.innerText = 'Subscribe to Updates';
+                submitBtn.innerText = 'Subscribe to Intelligence';
                 submitBtn.disabled = false;
             }
         });
