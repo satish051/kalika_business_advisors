@@ -1,5 +1,9 @@
 const jwt = require('jsonwebtoken');
-const { kv } = require('@vercel/kv');
+const { createClient } = require('@vercel/kv');
+const kv = createClient({
+    url: process.env.KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL,
+    token: process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN,
+});
 
 const SECRET_KEY = process.env.APP_SECRET || 'fallback_secret_change_in_production';
 
