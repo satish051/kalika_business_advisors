@@ -1,0 +1,21 @@
+<?php
+// admin/logout.php
+require_once 'auth.php';
+
+if (validate_session()) {
+    audit_log("LOGOUT", "User logged out manually.");
+}
+
+$_SESSION = array();
+if (ini_get("session.use_cookies")) {
+    $params = session_get_cookie_params();
+    setcookie(session_name(), '', time() - 42000,
+        $params["path"], $params["domain"],
+        $params["secure"], $params["httponly"]
+    );
+}
+session_destroy();
+
+header("Location: login.php");
+exit;
+?>

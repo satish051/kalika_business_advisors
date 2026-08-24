@@ -1,0 +1,4 @@
+# Protect data.json from direct HTTP access
+<Files "data.json">
+    Require all denied
+</Files>

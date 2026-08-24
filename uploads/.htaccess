@@ -1,0 +1,9 @@
+# Disable execution of scripts in the uploads directory
+RemoveHandler .php .phtml .php3 .php4 .php5 .php7 .php8
+RemoveType .php .phtml .php3 .php4 .php5 .php7 .php8
+php_flag engine off
+
+# Serve as generic file to prevent browser execution
+<FilesMatch "\.(php|phtml|php3|php4|php5|php7|php8|pl|py|cgi|sh|shtml)$">
+    ForceType text/plain
+</FilesMatch>

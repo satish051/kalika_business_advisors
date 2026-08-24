@@ -1,3 +1,30 @@
+<?php
+header("X-Content-Type-Options: nosniff");
+header("X-Frame-Options: DENY");
+header("Referrer-Policy: strict-origin-when-cross-origin");
+header("Permissions-Policy: geolocation=(), microphone=(), camera=()");
+if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') {
+    header("Strict-Transport-Security: max-age=31536000; includeSubDomains");
+}
+header("Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https://images.unsplash.com; frame-src 'self' https://www.youtube-nocookie.com https://player.vimeo.com;");
+
+$data_file = __DIR__ . '/storage/data.json';
+$data = [
+    "hero_title" => "A consulting firm for everything.",
+    "hero_description" => "Chartered accountants, lawyers, policy drafters, environmental specialists, former senior officials, and veteran bankers — consolidated on one premium platform, accountable for the outcome.",
+    "hero_bg" => "amazing-panorama-from-gokyo-ri-viewpoint-mount-everest-lho-la-nuptse-lhotse-peaks-sagarmatha-national-park-nepalgolden-sunrise-with-clear-blue-sky-mt-everest-peak-view.jpg",
+    "founder_img" => "Gemini_Generated_Image_mebqh2mebqh2mebq.jpg",
+    "video_url" => "https://www.youtube-nocookie.com/embed/ScMzIvxBSi4?controls=0&rel=0&autoplay=0&mute=1&loop=1&playlist=ScMzIvxBSi4",
+    "notice" => [ "enabled" => false, "title" => "Important Notice", "message" => "Welcome to our newly updated platform.", "button_text" => "Acknowledge" ]
+];
+if (file_exists($data_file)) {
+    $json_content = file_get_contents($data_file);
+    $parsed = json_decode($json_content, true);
+    if (json_last_error() === JSON_ERROR_NONE && is_array($parsed)) {
+        $data = array_merge($data, $parsed);
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -111,7 +138,7 @@
         }
         .hero-bg {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background-image: url('amazing-panorama-from-gokyo-ri-viewpoint-mount-everest-lho-la-nuptse-lhotse-peaks-sagarmatha-national-park-nepalgolden-sunrise-with-clear-blue-sky-mt-everest-peak-view.jpg'); background-size: cover; background-position: center; z-index: 0;
+            background-image: url('<?php echo htmlspecialchars($data['hero_bg']); ?>'); background-size: cover; background-position: center; z-index: 0;
             transform: scale(1.08); animation: slowZoom 25s ease-out forwards;
         }
         @keyframes slowZoom { 100% { transform: scale(1); } }
@@ -373,6 +400,29 @@
             .client-grid { gap: 30px; }
             .client-logo i { font-size: 1.8rem; }
             .client-logo { font-size: 1.1rem; }
+        /* Startup Notice Modal */
+        .notice-modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(8, 12, 17, 0.85); backdrop-filter: blur(8px);
+            z-index: 9999; display: flex; align-items: center; justify-content: center;
+            opacity: 0; visibility: hidden; transition: all 0.5s ease;
+        }
+        .notice-modal-overlay.active { opacity: 1; visibility: visible; }
+        .notice-modal {
+            background: var(--surface); padding: 50px; border-radius: var(--radius-sm);
+            border: 1px solid var(--gold-border); box-shadow: var(--shadow-gold);
+            max-width: 500px; width: 90%; text-align: center; position: relative;
+            transform: translateY(20px); transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .notice-modal-overlay.active .notice-modal { transform: translateY(0); }
+        .notice-modal h3 { font-family: 'Playfair Display', serif; color: var(--accent); margin-bottom: 20px; font-size: 1.8rem; }
+        .notice-modal p { color: var(--text-muted); margin-bottom: 30px; font-size: 1.05rem; }
+        .notice-modal .btn { width: 100%; }
+        .notice-close {
+            position: absolute; top: 15px; right: 20px; background: transparent; border: none;
+            color: var(--text-muted); font-size: 1.5rem; cursor: pointer; transition: color 0.3s;
+        }
+        .notice-close:hover { color: var(--accent); }
         }
     </style>
 </head>
@@ -411,8 +461,8 @@
             <div class="hero-tag">
                 <i class="fas fa-globe-asia"></i> Based in Nepal. Navigate to Excellence.
             </div>
-            <h1>A consulting firm for everything.</h1>
-            <p>Chartered accountants, lawyers, policy drafters, environmental specialists, former senior officials, and veteran bankers — consolidated on one premium platform, accountable for the outcome.</p>
+            <h1><?php echo htmlspecialchars($data['hero_title']); ?></h1>
+            <p><?php echo htmlspecialchars($data['hero_description']); ?></p>
             <div class="btn-group">
                 <a href="#contact" class="btn btn-primary">Initiate Consultation</a>
                 <a href="#video-tour" class="btn btn-secondary"><i class="fas fa-play-circle" style="margin-right: 8px;"></i> Watch Corporate Profile</a>
@@ -429,7 +479,7 @@
                 <p style="margin: 0 auto;">A look into our multidisciplinary approach and uncompromising standards.</p>
             </div>
             <div class="video-wrapper reveal delay-1">
-                <iframe src="https://www.youtube-nocookie.com/embed/ScMzIvxBSi4?controls=0&rel=0&autoplay=0&mute=1&loop=1&playlist=ScMzIvxBSi4" title="Corporate Video Placeholder" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                <iframe src="<?php echo htmlspecialchars($data['video_url']); ?>" title="Corporate Video Placeholder" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
             </div>
         </div>
     </section>
@@ -456,7 +506,7 @@
         <div class="container">
             <div class="founder-layout">
                 <div class="founder-image-wrapper reveal">
-                    <img src="Gemini_Generated_Image_mebqh2mebqh2mebq.jpg" alt="Founder & Managing Director">
+                    <img src="<?php echo htmlspecialchars($data['founder_img']); ?>" alt="Founder & Managing Director">
                 </div>
                 <div class="founder-content reveal delay-1">
                     <div class="section-header" style="margin-bottom: 30px;">
@@ -813,5 +863,71 @@
             }
         });
     </script>
+
+    <?php if (isset($data['notice']) && $data['notice']['enabled']): ?>
+    <!-- Notice Modal -->
+    <div class="notice-modal-overlay" id="notice-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="notice-modal-title" tabindex="-1">
+        <div class="notice-modal" id="notice-modal">
+            <button class="notice-close" id="notice-close" aria-label="Close Notice"><i class="fas fa-times"></i></button>
+            <h3 id="notice-modal-title"><?php echo htmlspecialchars($data['notice']['title']); ?></h3>
+            <p><?php echo nl2br(htmlspecialchars($data['notice']['message'])); ?></p>
+            <?php if (!empty($data['notice']['button_text'])): ?>
+                <button class="btn btn-primary" id="notice-ack-btn"><?php echo htmlspecialchars($data['notice']['button_text']); ?></button>
+            <?php endif; ?>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const overlay = document.getElementById('notice-modal-overlay');
+            const closeBtn = document.getElementById('notice-close');
+            const ackBtn = document.getElementById('notice-ack-btn');
+            const modal = document.getElementById('notice-modal');
+
+            // Show on load
+            setTimeout(() => {
+                overlay.classList.add('active');
+                closeBtn.focus();
+            }, 500);
+
+            const closeModal = () => {
+                overlay.classList.remove('active');
+            };
+
+            closeBtn.addEventListener('click', closeModal);
+            if (ackBtn) ackBtn.addEventListener('click', closeModal);
+            
+            // ESC key to close
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && overlay.classList.contains('active')) {
+                    closeModal();
+                }
+            });
+
+            // Focus trap
+            const focusableElements = modal.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+            if (focusableElements.length > 0) {
+                const firstFocusable = focusableElements[0];
+                const lastFocusable = focusableElements[focusableElements.length - 1];
+
+                modal.addEventListener('keydown', (e) => {
+                    if (e.key === 'Tab') {
+                        if (e.shiftKey) { // Shift + Tab
+                            if (document.activeElement === firstFocusable) {
+                                lastFocusable.focus();
+                                e.preventDefault();
+                            }
+                        } else { // Tab
+                            if (document.activeElement === lastFocusable) {
+                                firstFocusable.focus();
+                                e.preventDefault();
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+    <?php endif; ?>
 </body>
 </html>
