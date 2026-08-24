@@ -2,10 +2,9 @@ const ejs = require('ejs');
 const path = require('path');
 const bcrypt = require('bcryptjs');
 const { createClient } = require('@vercel/kv');
-const kv = createClient({
-    url: process.env.KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL,
-    token: process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN,
-});
+const url = process.env.KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL;
+const token = process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN;
+const kv = url && token ? createClient({ url, token }) : null;
 const { validateSession } = require('../utils/auth');
 
 module.exports = async (req, res) => {
@@ -17,9 +16,13 @@ module.exports = async (req, res) => {
     let error_msg = '';
     let success_msg = '';
 
-    let authData = (await kv.get('auth_json')) || null;
+    if (!kv) {
+        error_msg = "Database not connected. Cannot save changes.";
+    }
 
-    if (req.method === 'POST') {
+    let authData = kv ? (await kv.get('auth_json')) || null : null;
+
+    if (req.method === 'POST' && kv) {
         const body = await new Promise((resolve) => {
             let data = '';
             req.on('data', chunk => data += chunk);

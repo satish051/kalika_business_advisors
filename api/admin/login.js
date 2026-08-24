@@ -2,10 +2,9 @@ const ejs = require('ejs');
 const path = require('path');
 const bcrypt = require('bcryptjs');
 const { createClient } = require('@vercel/kv');
-const kv = createClient({
-    url: process.env.KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL,
-    token: process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN,
-});
+const url = process.env.KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL;
+const token = process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN;
+const kv = url && token ? createClient({ url, token }) : null;
 const { validateSession, setSession, checkThrottle, recordFailedLogin, clearThrottle } = require('../utils/auth');
 
 module.exports = async (req, res) => {
@@ -16,7 +15,9 @@ module.exports = async (req, res) => {
 
     let error = '';
 
-    if (req.method === 'POST') {
+    if (!kv) {
+        error = 'CRITICAL ERROR: No Redis Database connected to Vercel! You cannot log in or save changes until you add the Upstash Redis database to your Vercel project.';
+    } else if (req.method === 'POST') {
         // Collect body data
         const body = await new Promise((resolve) => {
             let data = '';

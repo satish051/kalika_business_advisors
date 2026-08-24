@@ -1,10 +1,9 @@
 const ejs = require('ejs');
 const path = require('path');
 const { createClient } = require('@vercel/kv');
-const kv = createClient({
-    url: process.env.KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL,
-    token: process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN,
-});
+const url = process.env.KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL;
+const token = process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN;
+const kv = url && token ? createClient({ url, token }) : null;
 const { put } = require('@vercel/blob');
 const Busboy = require('busboy');
 const { validateSession } = require('../utils/auth');
@@ -15,7 +14,7 @@ module.exports = async (req, res) => {
         return res.writeHead(302, { Location: '/admin/login' }).end();
     }
 
-    const authData = (await kv.get('auth_json')) || {};
+    const authData = kv ? (await kv.get('auth_json')) || {} : {};
     if (authData.must_change_password) {
         return res.writeHead(302, { Location: '/admin/settings' }).end();
     }
@@ -29,11 +28,15 @@ module.exports = async (req, res) => {
         notice: { enabled: false, title: "Important Notice", message: "Welcome to our newly updated platform.", button_text: "Acknowledge" }
     };
 
-    let data = (await kv.get('site_data')) || default_data;
+    let data = kv ? ((await kv.get('site_data')) || default_data) : default_data;
     let success_msg = '';
     let error_msg = '';
+    
+    if (!kv) {
+        error_msg = "Database not connected. Cannot save changes.";
+    }
 
-    if (req.method === 'POST') {
+    if (req.method === 'POST' && kv) {
         const busboy = Busboy({ headers: req.headers });
         const fields = {};
         const uploads = [];

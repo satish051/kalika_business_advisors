@@ -1,9 +1,8 @@
 const jwt = require('jsonwebtoken');
 const { createClient } = require('@vercel/kv');
-const kv = createClient({
-    url: process.env.KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL,
-    token: process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN,
-});
+const url = process.env.KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL;
+const token = process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN;
+const kv = url && token ? createClient({ url, token }) : null;
 
 const SECRET_KEY = process.env.APP_SECRET || 'fallback_secret_change_in_production';
 
@@ -69,7 +68,7 @@ function clearSession(res) {
     res.setHeader('Set-Cookie', cookieHeader);
 }
 
-async function checkThrottle(ip) {
+async function checkThrottle(ip) {\n    if (!kv) return false;
     const data = (await kv.get('throttle_json')) || {};
     if (data[ip]) {
         const lockedUntil = data[ip].locked_until || 0;
@@ -80,7 +79,7 @@ async function checkThrottle(ip) {
     return true;
 }
 
-async function recordFailedLogin(ip) {
+async function recordFailedLogin(ip) {\n    if (!kv) return;
     const data = (await kv.get('throttle_json')) || {};
     if (!data[ip]) {
         data[ip] = { failed: 0, last_attempt: Date.now(), locked_until: 0 };
@@ -96,7 +95,7 @@ async function recordFailedLogin(ip) {
     await kv.set('throttle_json', data);
 }
 
-async function clearThrottle(ip) {
+async function clearThrottle(ip) {\n    if (!kv) return;
     const data = (await kv.get('throttle_json')) || {};
     if (data[ip]) {
         delete data[ip];
