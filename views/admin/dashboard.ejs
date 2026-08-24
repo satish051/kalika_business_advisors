@@ -95,14 +95,16 @@
         let notices = <%- JSON.stringify(data.notices || []) %>;
         
         // Backwards compatibility for single notice
-        if (notices.length === 0 && <%- JSON.stringify(data.notice || null) %>) {
-            notices.push(<%- JSON.stringify(data.notice) %>);
+        const fallbackNotice = <%- JSON.stringify(data.notice || null) %>;
+        if (notices.length === 0 && fallbackNotice) {
+            notices.push(fallbackNotice);
         }
 
         function renderNotices() {
             const container = document.getElementById('notices-container');
             container.innerHTML = '';
             notices.forEach((n, idx) => {
+                if (!n) return; // skip invalid notices
                 container.innerHTML += `
                     <div style="border: 1px solid #eee; padding: 15px; margin-bottom: 15px; border-radius: 4px; position:relative;">
                         <button type="button" onclick="removeNotice(${idx})" style="position:absolute; right:15px; top:15px; background:#ff4444; color:white; border:none; padding:5px 10px; cursor:pointer; border-radius:4px;">X</button>
