@@ -1,11 +1,9 @@
 {
-  "functions": {
-    "api/**/*.php": {
-      "runtime": "vercel-php@0.9.0"
-    }
-  },
-  "routes": [
-    { "src": "/admin/(.*)", "dest": "/api/admin/$1" },
-    { "src": "/(.*)", "dest": "/api/index.php" }
+  "rewrites": [
+    { "source": "/", "destination": "/api/index" },
+    { "source": "/admin/login", "destination": "/api/admin/login" },
+    { "source": "/admin/dashboard", "destination": "/api/admin/dashboard" },
+    { "source": "/admin/settings", "destination": "/api/admin/settings" },
+    { "source": "/admin/logout", "destination": "/api/admin/logout" }
   ]
 }

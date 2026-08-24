@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard - Node Serverless</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f4f4f5; color: #333; margin: 0; }
+        .sidebar { width: 250px; background: #080C11; color: white; position: fixed; height: 100vh; padding: 20px; box-sizing: border-box; }
+        .sidebar h2 { color: #D4AF37; margin-top: 0; font-size: 1.2rem; margin-bottom: 40px; }
+        .sidebar a { color: #ccc; text-decoration: none; display: block; margin-bottom: 15px; }
+        .sidebar a:hover { color: #fff; }
+        .main-content { margin-left: 250px; padding: 40px; }
+        .card { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-bottom: 30px; }
+        h3 { border-bottom: 1px solid #eee; padding-bottom: 10px; margin-top: 0; }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.9rem; }
+        input[type="text"], input[type="url"], textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-family: inherit; }
+        .btn { padding: 12px 24px; background: #080C11; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; }
+        .btn:hover { background: #D4AF37; color: #080C11; }
+        .alert { padding: 15px; margin-bottom: 20px; border-radius: 4px; }
+        .alert-success { background: #d4edda; color: #155724; }
+        .alert-danger { background: #f8d7da; color: #721c24; }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <h2>Kalika Admin</h2>
+        <a href="/admin/dashboard">Dashboard</a>
+        <a href="/admin/settings">Security Settings</a>
+        <a href="/" target="_blank">View Website</a>
+        <a href="/admin/logout" style="color:#ff4444; margin-top: 50px;">Logout</a>
+    </div>
+
+    <div class="main-content">
+        <h2>Vercel Node.js Dashboard</h2>
+        
+        <% if (success_msg) { %>
+            <div class="alert alert-success"><%= success_msg %></div>
+        <% } %>
+        <% if (error_msg) { %>
+            <div class="alert alert-danger"><%= error_msg %></div>
+        <% } %>
+
+        <form method="POST" action="/admin/dashboard" enctype="multipart/form-data">
+            
+            <div class="card">
+                <h3>Hero Section</h3>
+                <div class="form-group">
+                    <label>Hero Title (Max 100 chars)</label>
+                    <input type="text" name="hero_title" maxlength="100" value="<%= data.hero_title %>" required>
+                </div>
+                <div class="form-group">
+                    <label>Hero Description (Max 500 chars)</label>
+                    <textarea name="hero_description" rows="3" maxlength="500" required><%= data.hero_description %></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Hero Background Image (Vercel Blob)</label>
+                    <input type="file" name="hero_bg_file" accept="image/jpeg, image/png, image/webp">
+                    <small style="word-break: break-all;">Current: <%= data.hero_bg %></small>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Founder Section</h3>
+                <div class="form-group">
+                    <label>Founder Image (Vercel Blob)</label>
+                    <input type="file" name="founder_img_file" accept="image/jpeg, image/png, image/webp">
+                    <small style="word-break: break-all;">Current: <%= data.founder_img %></small>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Video Section</h3>
+                <div class="form-group">
+                    <label>Video URL (YouTube/Vimeo)</label>
+                    <input type="url" name="video_url" value="<%= data.video_url %>" required>
+                </div>
+            </div>
+
+            <button type="submit" class="btn">Save to Vercel KV</button>
+        </form>
+    </div>
+
+</body>
+</html>
