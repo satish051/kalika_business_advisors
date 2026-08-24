@@ -1,11 +1,33 @@
 const jwt = require('jsonwebtoken');
-const { parse, serialize } = require('cookie');
 const { kv } = require('@vercel/kv');
 
 const SECRET_KEY = process.env.APP_SECRET || 'fallback_secret_change_in_production';
 
+// Simple cookie parser
+function parseCookies(cookieHeader) {
+    if (!cookieHeader) return {};
+    return cookieHeader.split(';').reduce((acc, cookie) => {
+        const [key, value] = cookie.trim().split('=');
+        if (key && value) {
+            acc[key] = decodeURIComponent(value);
+        }
+        return acc;
+    }, {});
+}
+
+// Simple cookie serializer
+function serializeCookie(name, val, options = {}) {
+    let str = `${name}=${encodeURIComponent(val)}`;
+    if (options.maxAge) str += `; Max-Age=${options.maxAge}`;
+    if (options.path) str += `; Path=${options.path}`;
+    if (options.httpOnly) str += '; HttpOnly';
+    if (options.secure) str += '; Secure';
+    if (options.sameSite) str += `; SameSite=${options.sameSite}`;
+    return str;
+}
+
 async function validateSession(req) {
-    const cookies = parse(req.headers.cookie || '');
+    const cookies = parseCookies(req.headers.cookie);
     const token = cookies.vercel_session;
     if (!token) return null;
 
@@ -22,7 +44,7 @@ async function validateSession(req) {
 
 function setSession(res, data) {
     const token = jwt.sign(data, SECRET_KEY, { expiresIn: '12h' });
-    const cookieHeader = serialize('vercel_session', token, {
+    const cookieHeader = serializeCookie('vercel_session', token, {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'strict',
@@ -33,7 +55,7 @@ function setSession(res, data) {
 }
 
 function clearSession(res) {
-    const cookieHeader = serialize('vercel_session', '', {
+    const cookieHeader = serializeCookie('vercel_session', '', {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'strict',
