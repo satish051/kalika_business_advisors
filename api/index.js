@@ -30,7 +30,7 @@ module.exports = async (req, res) => {
     if (process.env.NODE_ENV === 'production') {
         res.setHeader("Strict-Transport-Security", "max-age=31536000; includeSubDomains");
     }
-    res.setHeader("Content-Security-Policy", "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https://images.unsplash.com https://*.public.blob.vercel-storage.com; frame-src 'self' https://www.youtube-nocookie.com https://player.vimeo.com;");
+    res.setHeader("Content-Security-Policy", "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https://images.unsplash.com https://*.public.blob.vercel-storage.com; frame-src 'self' https://www.youtube-nocookie.com https://www.youtube.com https://player.vimeo.com;");
 
     ejs.renderFile(templatePath, { data }, (err, str) => {
         if (err) return res.status(500).send('Template error: ' + err);
