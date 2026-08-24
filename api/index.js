@@ -10,6 +10,8 @@ module.exports = async (req, res) => {
         founder_img: "Gemini_Generated_Image_mebqh2mebqh2mebq.jpg",
         video_url: "https://www.youtube-nocookie.com/embed/ScMzIvxBSi4?controls=0&rel=0&autoplay=0&mute=1&loop=1&playlist=ScMzIvxBSi4",
         notice: { enabled: false, title: "Important Notice", message: "Welcome to our newly updated platform.", button_text: "Acknowledge" }
+    };
+    
     let data = default_data;
     try {
         if (process.env.KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL) {
