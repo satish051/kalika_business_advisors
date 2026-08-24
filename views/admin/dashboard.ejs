@@ -78,9 +78,82 @@
                 </div>
             </div>
 
+            <div class="card">
+                <h3>Notices (Popup Modal)</h3>
+                <div id="notices-container">
+                    <!-- Javascript will populate this -->
+                </div>
+                <button type="button" class="btn" onclick="addNotice()" style="background:#4CAF50;margin-top:10px;">+ Add Notice</button>
+                <input type="hidden" name="notices_json" id="notices_json">
+            </div>
+
             <button type="submit" class="btn">Save to Vercel KV</button>
         </form>
     </div>
 
+    <script>
+        let notices = <%- JSON.stringify(data.notices || []) %>;
+        
+        // Backwards compatibility for single notice
+        if (notices.length === 0 && <%- JSON.stringify(data.notice || null) %>) {
+            notices.push(<%- JSON.stringify(data.notice) %>);
+        }
+
+        function renderNotices() {
+            const container = document.getElementById('notices-container');
+            container.innerHTML = '';
+            notices.forEach((n, idx) => {
+                container.innerHTML += `
+                    <div style="border: 1px solid #eee; padding: 15px; margin-bottom: 15px; border-radius: 4px; position:relative;">
+                        <button type="button" onclick="removeNotice(${idx})" style="position:absolute; right:15px; top:15px; background:#ff4444; color:white; border:none; padding:5px 10px; cursor:pointer; border-radius:4px;">X</button>
+                        
+                        <div class="form-group">
+                            <label><input type="checkbox" onchange="updateNotice(${idx}, 'enabled', this.checked)" ${n.enabled ? 'checked' : ''}> Enable this notice</label>
+                        </div>
+                        <div class="form-group">
+                            <label>Title</label>
+                            <input type="text" onchange="updateNotice(${idx}, 'title', this.value)" value="${n.title || ''}" placeholder="Notice Title">
+                        </div>
+                        <div class="form-group">
+                            <label>Message</label>
+                            <textarea onchange="updateNotice(${idx}, 'message', this.value)" rows="3" placeholder="Notice Message">${n.message || ''}</textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Button Text (Optional)</label>
+                            <input type="text" onchange="updateNotice(${idx}, 'button_text', this.value)" value="${n.button_text || ''}" placeholder="E.g. Acknowledge">
+                        </div>
+                        <div class="form-group">
+                            <label>Format / Theme</label>
+                            <select onchange="updateNotice(${idx}, 'format', this.value)" style="width:100%; padding:10px; border:1px solid #ccc; border-radius:4px;">
+                                <option value="default" ${n.format === 'default' ? 'selected' : ''}>Default (Gold)</option>
+                                <option value="danger" ${n.format === 'danger' ? 'selected' : ''}>Urgent (Red)</option>
+                                <option value="info" ${n.format === 'info' ? 'selected' : ''}>Info (Blue)</option>
+                            </select>
+                        </div>
+                    </div>
+                `;
+            });
+            document.getElementById('notices_json').value = JSON.stringify(notices);
+        }
+
+        function updateNotice(idx, key, value) {
+            notices[idx][key] = value;
+            document.getElementById('notices_json').value = JSON.stringify(notices);
+        }
+
+        function addNotice() {
+            notices.push({ enabled: true, title: '', message: '', button_text: 'Acknowledge', format: 'default' });
+            renderNotices();
+        }
+
+        function removeNotice(idx) {
+            if (confirm('Remove this notice?')) {
+                notices.splice(idx, 1);
+                renderNotices();
+            }
+        }
+
+        renderNotices();
+    </script>
 </body>
 </html>

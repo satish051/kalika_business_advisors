@@ -837,16 +837,42 @@
         });
     </script>
 
-    <% if (data.notice && data.notice.enabled) { %>
+    <% 
+    let activeNotices = [];
+    if (data.notices && data.notices.length > 0) {
+        activeNotices = data.notices.filter(n => n.enabled);
+    } else if (data.notice && data.notice.enabled) {
+        activeNotices = [data.notice];
+    }
+%>
+    <% if (activeNotices.length > 0) { %>
     <!-- Notice Modal -->
-    <div class="notice-modal-overlay" id="notice-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="notice-modal-title" tabindex="-1">
-        <div class="notice-modal" id="notice-modal">
+    <div class="notice-modal-overlay" id="notice-modal-overlay" role="dialog" aria-modal="true" tabindex="-1">
+        <div class="notice-modal" id="notice-modal" style="max-height: 80vh; display: flex; flex-direction: column;">
             <button class="notice-close" id="notice-close" aria-label="Close Notice"><i class="fas fa-times"></i></button>
-            <h3 id="notice-modal-title"><%= data.notice.title %></h3>
-            <p><%- data.notice.message.replace(/\n/g, "<br>") %></p>
-            <% if (data.notice.button_text) { %>
-                <button class="btn btn-primary" id="notice-ack-btn"><%= data.notice.button_text %></button>
+            <h3 style="margin-bottom: 20px;">Important Notices</h3>
+            <div style="overflow-y: auto; text-align: left; padding-right: 10px; margin-bottom: 20px;">
+                <% activeNotices.forEach(function(notice, idx) { 
+                    let borderColor = '#D4AF37';
+                    let bgColor = 'transparent';
+                    if (notice.format === 'danger') { borderColor = '#ff4444'; bgColor = 'rgba(255, 68, 68, 0.05)'; }
+                    if (notice.format === 'info') { borderColor = '#33b5e5'; bgColor = 'rgba(51, 181, 229, 0.05)'; }
+                %>
+                <div style="border-left: 4px solid <%= borderColor %>; background: <%= bgColor %>; padding: 15px; margin-bottom: 20px; border-radius: 4px;">
+                    <h4 style="margin-top:0; margin-bottom: 10px; color: <%= borderColor %>"><%= notice.title %></h4>
+                    <p style="margin-bottom: 15px; font-size: 0.95rem; line-height: 1.6;"><%- notice.message.replace(/\n/g, "<br>") %></p>
+                    <% if (notice.button_text) { %>
+                        <button class="btn btn-primary notice-ack-btn" style="width: auto; padding: 8px 16px; font-size: 0.9rem;"><%= notice.button_text %></button>
+                    <% } %>
+                </div>
+                <% }); %>
+            </div>
+            <% if (activeNotices.every(n => !n.button_text)) { %>
+                <button class="btn btn-primary notice-ack-btn" style="width: 100%;">Close</button>
             <% } %>
+        </div>
+    </div>
+    <% } %>
         </div>
     </div>
     
@@ -854,7 +880,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             const overlay = document.getElementById('notice-modal-overlay');
             const closeBtn = document.getElementById('notice-close');
-            const ackBtn = document.getElementById('notice-ack-btn');
+            const ackBtns = document.querySelectorAll(".notice-ack-btn");
             const modal = document.getElementById('notice-modal');
 
             // Show on load
@@ -868,7 +894,7 @@
             };
 
             closeBtn.addEventListener('click', closeModal);
-            if (ackBtn) ackBtn.addEventListener('click', closeModal);
+            ackBtns.forEach(btn => btn.addEventListener("click", closeModal));
             
             // ESC key to close
             document.addEventListener('keydown', (e) => {

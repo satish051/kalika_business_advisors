@@ -68,6 +68,13 @@ module.exports = async (req, res) => {
 
         if (!error_msg) {
             try {
+                if (fields.notices_json) {
+                    try {
+                        data.notices = JSON.parse(fields.notices_json);
+                    } catch (e) {
+                        console.error('Failed to parse notices_json', e);
+                    }
+                }
                 data.hero_title = (fields.hero_title || '').substring(0, 100);
                 data.hero_description = (fields.hero_description || '').substring(0, 500);
                 
