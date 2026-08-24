@@ -111,7 +111,7 @@
         }
         .hero-bg {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background-image: url('<?php echo htmlspecialchars($data['hero_bg']); ?>'); background-size: cover; background-position: center; z-index: 0;
+            background-image: url('<%= data.hero_bg %>'); background-size: cover; background-position: center; z-index: 0;
             transform: scale(1.08); animation: slowZoom 25s ease-out forwards;
         }
         @keyframes slowZoom { 100% { transform: scale(1); } }
@@ -434,8 +434,8 @@
             <div class="hero-tag">
                 <i class="fas fa-globe-asia"></i> Based in Nepal. Navigate to Excellence.
             </div>
-            <h1><?php echo htmlspecialchars($data['hero_title']); ?></h1>
-            <p><?php echo htmlspecialchars($data['hero_description']); ?></p>
+            <h1><%= data.hero_title %></h1>
+            <p><%= data.hero_description %></p>
             <div class="btn-group">
                 <a href="#contact" class="btn btn-primary">Initiate Consultation</a>
                 <a href="#video-tour" class="btn btn-secondary"><i class="fas fa-play-circle" style="margin-right: 8px;"></i> Watch Corporate Profile</a>
@@ -452,7 +452,7 @@
                 <p style="margin: 0 auto;">A look into our multidisciplinary approach and uncompromising standards.</p>
             </div>
             <div class="video-wrapper reveal delay-1">
-                <iframe src="<?php echo htmlspecialchars($data['video_url']); ?>" title="Corporate Video Placeholder" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                <iframe src="<%= data.video_url %>" title="Corporate Video Placeholder" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
             </div>
         </div>
     </section>
@@ -479,7 +479,7 @@
         <div class="container">
             <div class="founder-layout">
                 <div class="founder-image-wrapper reveal">
-                    <img src="<?php echo htmlspecialchars($data['founder_img']); ?>" alt="Founder & Managing Director">
+                    <img src="<%= data.founder_img %>" alt="Founder & Managing Director">
                 </div>
                 <div class="founder-content reveal delay-1">
                     <div class="section-header" style="margin-bottom: 30px;">
@@ -837,15 +837,15 @@
         });
     </script>
 
-    <?php if (isset($data['notice']) && $data['notice']['enabled']): ?>
+    <% if (data.notice && data.notice.enabled) { %>
     <!-- Notice Modal -->
     <div class="notice-modal-overlay" id="notice-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="notice-modal-title" tabindex="-1">
         <div class="notice-modal" id="notice-modal">
             <button class="notice-close" id="notice-close" aria-label="Close Notice"><i class="fas fa-times"></i></button>
-            <h3 id="notice-modal-title"><?php echo htmlspecialchars($data['notice']['title']); ?></h3>
-            <p><?php echo nl2br(htmlspecialchars($data['notice']['message'])); ?></p>
-            <?php if (!empty($data['notice']['button_text'])): ?>
-                <button class="btn btn-primary" id="notice-ack-btn"><?php echo htmlspecialchars($data['notice']['button_text']); ?></button>
+            <h3 id="notice-modal-title"><%= data.notice.title %></h3>
+            <p><%- data.notice.message.replace(/\n/g, "<br>") %></p>
+            <% if (data.notice.button_text) { %>
+                <button class="btn btn-primary" id="notice-ack-btn"><%= data.notice.button_text %></button>
             <% } %>
         </div>
     </div>
