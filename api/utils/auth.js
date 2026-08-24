@@ -1,8 +1,5 @@
 const jwt = require('jsonwebtoken');
-const { createClient } = require('@vercel/kv');
-const url = process.env.KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL;
-const token = process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN;
-const kv = url && token ? createClient({ url, token }) : null;
+const { kv, isDbConnected } = require('./db');
 
 const SECRET_KEY = process.env.APP_SECRET || 'fallback_secret_change_in_production';
 
@@ -69,7 +66,7 @@ function clearSession(res) {
 }
 
 async function checkThrottle(ip) {
-    if (!kv) return false;
+    if (!isDbConnected()) return false;
     const data = (await kv.get('throttle_json')) || {};
     if (data[ip]) {
         const lockedUntil = data[ip].locked_until || 0;
@@ -81,7 +78,7 @@ async function checkThrottle(ip) {
 }
 
 async function recordFailedLogin(ip) {
-    if (!kv) return;
+    if (!isDbConnected()) return;
     const data = (await kv.get('throttle_json')) || {};
     if (!data[ip]) {
         data[ip] = { failed: 0, last_attempt: Date.now(), locked_until: 0 };
@@ -98,7 +95,7 @@ async function recordFailedLogin(ip) {
 }
 
 async function clearThrottle(ip) {
-    if (!kv) return;
+    if (!isDbConnected()) return;
     const data = (await kv.get('throttle_json')) || {};
     if (data[ip]) {
         delete data[ip];

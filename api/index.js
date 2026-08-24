@@ -18,7 +18,7 @@ module.exports = async (req, res) => {
     
     let data = default_data;
     try {
-        if (kv) {
+        if (isDbConnected()) {
             const remote_data = await kv.get('site_data');
             if (remote_data) data = remote_data;
         }
