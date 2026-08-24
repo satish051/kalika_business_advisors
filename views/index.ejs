@@ -453,7 +453,16 @@
                 <p style="margin: 0 auto;">A look into our multidisciplinary approach and uncompromising standards.</p>
             </div>
             <div class="video-wrapper reveal delay-1">
-                <iframe src="<%= data.video_url %>" title="Corporate Video Placeholder" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                <%
+                let finalVideoUrl = data.video_url || '';
+                finalVideoUrl = finalVideoUrl.replace('http://', 'https://');
+                if (finalVideoUrl.includes('youtube.com/watch?v=')) {
+                    finalVideoUrl = finalVideoUrl.replace('youtube.com/watch?v=', 'youtube.com/embed/').split('&')[0];
+                } else if (finalVideoUrl.includes('youtu.be/')) {
+                    finalVideoUrl = finalVideoUrl.replace('youtu.be/', 'youtube.com/embed/').split('?')[0];
+                }
+              %>
+              <iframe src="<%= finalVideoUrl %>" title="Corporate Video Placeholder" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
             </div>
         </div>
     </section>
