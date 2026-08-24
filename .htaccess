@@ -1,4 +1,16 @@
-# Protect data.json from direct HTTP access
-<Files "data.json">
-    Require all denied
-</Files>
+# Disable directory browsing
+Options -Indexes
+
+# Protect sensitive files and directories
+<FilesMatch "^\.env|^\.htaccess|\.jsonl?$|config\.php$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# Protect the storage and backups directories from direct access
+RewriteEngine On
+RewriteRule ^storage/ - [F,L]
+RewriteRule ^admin/storage/ - [F,L]
+
+# Prevent script execution in uploads directory
+RewriteRule ^uploads/.*\.php$ - [F,L]
