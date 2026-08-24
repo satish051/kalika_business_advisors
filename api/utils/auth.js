@@ -68,7 +68,8 @@ function clearSession(res) {
     res.setHeader('Set-Cookie', cookieHeader);
 }
 
-async function checkThrottle(ip) {\n    if (!kv) return false;
+async function checkThrottle(ip) {
+    if (!kv) return false;
     const data = (await kv.get('throttle_json')) || {};
     if (data[ip]) {
         const lockedUntil = data[ip].locked_until || 0;
@@ -79,7 +80,8 @@ async function checkThrottle(ip) {\n    if (!kv) return false;
     return true;
 }
 
-async function recordFailedLogin(ip) {\n    if (!kv) return;
+async function recordFailedLogin(ip) {
+    if (!kv) return;
     const data = (await kv.get('throttle_json')) || {};
     if (!data[ip]) {
         data[ip] = { failed: 0, last_attempt: Date.now(), locked_until: 0 };
@@ -95,7 +97,8 @@ async function recordFailedLogin(ip) {\n    if (!kv) return;
     await kv.set('throttle_json', data);
 }
 
-async function clearThrottle(ip) {\n    if (!kv) return;
+async function clearThrottle(ip) {
+    if (!kv) return;
     const data = (await kv.get('throttle_json')) || {};
     if (data[ip]) {
         delete data[ip];
