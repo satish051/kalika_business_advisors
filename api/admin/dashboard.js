@@ -75,6 +75,16 @@ module.exports = async (req, res) => {
                         console.error('Failed to parse notices_json', e);
                     }
                 }
+                if (fields.clients_json) {
+                    try {
+                        data.clients = JSON.parse(fields.clients_json);
+                    } catch (e) {
+                        console.error('Failed to parse clients_json', e);
+                    }
+                } else {
+                    data.clients = data.clients || [];
+                }
+                
                 data.hero_title = (fields.hero_title || '').substring(0, 100);
                 data.hero_description = (fields.hero_description || '').substring(0, 500);
                 
@@ -94,6 +104,13 @@ module.exports = async (req, res) => {
                     const blob = await put(upload.filename, upload.buffer, { access: 'public' });
                     if (upload.name === 'hero_bg_file') data.hero_bg = blob.url;
                     if (upload.name === 'founder_img_file') data.founder_img = blob.url;
+                    
+                    if (upload.name.startsWith('client_logo_file_')) {
+                        const idx = parseInt(upload.name.split('_').pop());
+                        if (data.clients && data.clients[idx]) {
+                            data.clients[idx].logo_url = blob.url;
+                        }
+                    }
                 }
 
                 await kv.set('site_data', data);

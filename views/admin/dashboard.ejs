@@ -87,6 +87,15 @@
                 <input type="hidden" name="notices_json" id="notices_json">
             </div>
 
+            <div class="card">
+                <h3>Our Esteemed Clientele</h3>
+                <div id="clients-container">
+                    <!-- Javascript will populate this -->
+                </div>
+                <button type="button" class="btn" onclick="addClient()" style="background:#4CAF50;margin-top:10px;">+ Add Client</button>
+                <input type="hidden" name="clients_json" id="clients_json">
+            </div>
+
             <button type="submit" class="btn">Save to Vercel KV</button>
         </form>
     </div>
@@ -156,6 +165,61 @@
         }
 
         renderNotices();
+
+        // Clients Logic
+        let clients = <%- JSON.stringify(data.clients || []) %>;
+        if (clients.length === 0) {
+            // Provide default placeholders matching the original hardcoded ones if empty
+            clients = [
+                { name: 'Hyteno Tech', logo_url: 'hytenotech.png' },
+                { name: 'Thaha Investment Group', logo_url: 'thahainvestmentgroup.png' },
+                { name: 'Samir Dance Studio', logo_url: 'samirdancestudio.png' },
+                { name: 'Paramendo', logo_url: 'PARAMENDO.jpg' }
+            ];
+        }
+
+        function renderClients() {
+            const container = document.getElementById('clients-container');
+            container.innerHTML = '';
+            clients.forEach((c, idx) => {
+                if (!c) return; 
+                container.innerHTML += `
+                    <div style="border: 1px solid #eee; padding: 15px; margin-bottom: 15px; border-radius: 4px; position:relative;">
+                        <button type="button" onclick="removeClient(${idx})" style="position:absolute; right:15px; top:15px; background:#ff4444; color:white; border:none; padding:5px 10px; cursor:pointer; border-radius:4px;">X</button>
+                        
+                        <div class="form-group">
+                            <label>Client Name</label>
+                            <input type="text" onchange="updateClient(${idx}, 'name', this.value)" value="${c.name || ''}" placeholder="E.g. Apex Holdings">
+                        </div>
+                        <div class="form-group">
+                            <label>Client Logo (Upload New)</label>
+                            <input type="file" name="client_logo_file_${idx}" accept="image/jpeg, image/png, image/webp, image/svg+xml">
+                            ${c.logo_url ? `<div style="margin-top:10px;"><small>Current Logo:</small><br><img src="${c.logo_url}" style="max-height: 50px; background: #ddd; padding: 5px; border-radius: 4px;"></div>` : ''}
+                        </div>
+                    </div>
+                `;
+            });
+            document.getElementById('clients_json').value = JSON.stringify(clients);
+        }
+
+        function updateClient(idx, key, value) {
+            clients[idx][key] = value;
+            document.getElementById('clients_json').value = JSON.stringify(clients);
+        }
+
+        function addClient() {
+            clients.push({ name: '', logo_url: '' });
+            renderClients();
+        }
+
+        function removeClient(idx) {
+            if (confirm('Remove this client?')) {
+                clients.splice(idx, 1);
+                renderClients();
+            }
+        }
+
+        renderClients();
     </script>
 </body>
 </html>

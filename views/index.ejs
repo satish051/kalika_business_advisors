@@ -150,9 +150,9 @@
         .clients-section .section-header h5 { justify-content: center; }
         .clients-section .section-header h5::after { display: none; }
         .client-grid { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: clamp(30px, 6vw, 100px); opacity: 0.8; }
-        .client-logo { display: flex; align-items: center; gap: 10px; font-family: 'Plus Jakarta Sans', sans-serif; font-size: clamp(1.2rem, 3vw, 1.5rem); font-weight: 700; color: #9CA3AF; letter-spacing: 0.05em; transition: all 0.5s ease; filter: grayscale(100%); cursor: pointer; }
+        .client-logo { display: flex; align-items: center; justify-content: center; gap: 10px; font-family: 'Plus Jakarta Sans', sans-serif; font-size: clamp(1.2rem, 3vw, 1.5rem); font-weight: 700; color: #9CA3AF; letter-spacing: 0.05em; transition: all 0.5s ease; filter: grayscale(100%); cursor: pointer; }
         .client-logo i { font-size: clamp(1.8rem, 4vw, 2.2rem); }
-        .client-logo img { max-height: 40px; width: auto; object-fit: contain; }
+        .client-logo img { max-height: 100px; width: auto; max-width: 180px; object-fit: contain; }
         .client-logo:hover { color: var(--accent); filter: grayscale(0%); transform: scale(1.05); opacity: 1; }
 
         /* Video Showcase */
@@ -422,7 +422,7 @@
                 <a href="#leadership">Leadership</a>
                 <a href="#experts">Our Experts</a>
                 <a href="#knowledge">Insights</a>
-                <a href="#contact" class="nav-cta">Talk to an expert</a>
+                <a href="#" id="talk-expert-btn" class="nav-cta">Talk to an expert</a>
             </div>
         </div>
     </nav>
@@ -475,11 +475,20 @@
                 <h2>Our Esteemed Clientele</h2>
             </div>
             <div class="client-grid reveal delay-1">
-                <div class="client-logo"><i class="fas fa-building"></i> Apex Holdings</div>
-                <div class="client-logo"><i class="fas fa-landmark"></i> NBL Financial</div>
-                <div class="client-logo"><i class="fas fa-industry"></i> K-Corp Infra</div>
-                <div class="client-logo"><i class="fas fa-hotel"></i> Summit Hospitality</div>
-                <div class="client-logo"><i class="fas fa-shield-halved"></i> Vanguard Trust</div>
+                <% 
+                let clients = data.clients || [
+                    { name: 'Hyteno Tech', logo_url: 'hytenotech.png' },
+                    { name: 'Thaha Investment Group', logo_url: 'thahainvestmentgroup.png' },
+                    { name: 'Samir Dance Studio', logo_url: 'samirdancestudio.png' },
+                    { name: 'Paramendo', logo_url: 'PARAMENDO.jpg' }
+                ];
+                clients.forEach(function(client) { 
+                    if (client.logo_url) {
+                %>
+                    <div class="client-logo" title="<%= client.name %>"><img src="<%= client.logo_url %>" alt="<%= client.name %>" onerror="this.onerror=null; this.parentElement.innerHTML='<i class=\'fas fa-building\'></i> <%= client.name %>';"></div>
+                <% } else { %>
+                    <div class="client-logo"><i class="fas <%= client.icon || 'fa-building' %>"></i> <%= client.name %></div>
+                <% } }); %>
             </div>
         </div>
     </section>
@@ -812,13 +821,17 @@
             submitBtn.disabled = true;
             formMessage.style.display = 'none';
 
-            const data = new FormData(form);
+            const formData = new FormData(form);
+            const plainData = Object.fromEntries(formData.entries());
 
             try {
                 const response = await fetch(form.action, {
                     method: form.method,
-                    body: data,
-                    headers: { 'Accept': 'application/json' }
+                    body: JSON.stringify(plainData),
+                    headers: { 
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    }
                 });
 
                 if (response.ok) {
@@ -893,45 +906,158 @@
             const ackBtns = document.querySelectorAll(".notice-ack-btn");
             const modal = document.getElementById('notice-modal');
 
-            // Show on load
-            setTimeout(() => {
-                overlay.classList.add('active');
-                closeBtn.focus();
-            }, 500);
+            if (overlay) {
+                // Show on load
+                setTimeout(() => {
+                    overlay.classList.add('active');
+                    if(closeBtn) closeBtn.focus();
+                }, 500);
 
-            const closeModal = () => {
-                overlay.classList.remove('active');
-            };
+                const closeModal = () => {
+                    overlay.classList.remove('active');
+                };
 
-            closeBtn.addEventListener('click', closeModal);
-            ackBtns.forEach(btn => btn.addEventListener("click", closeModal));
+                if(closeBtn) closeBtn.addEventListener('click', closeModal);
+                ackBtns.forEach(btn => btn.addEventListener("click", closeModal));
+                
+                // ESC key to close
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'Escape' && overlay.classList.contains('active')) {
+                        closeModal();
+                    }
+                });
+
+                // Focus trap
+                if (modal) {
+                    const focusableElements = modal.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+                    if (focusableElements.length > 0) {
+                        const firstFocusable = focusableElements[0];
+                        const lastFocusable = focusableElements[focusableElements.length - 1];
+
+                        modal.addEventListener('keydown', (e) => {
+                            if (e.key === 'Tab') {
+                                if (e.shiftKey) { // Shift + Tab
+                                    if (document.activeElement === firstFocusable) {
+                                        lastFocusable.focus();
+                                        e.preventDefault();
+                                    }
+                                } else { // Tab
+                                    if (document.activeElement === lastFocusable) {
+                                        firstFocusable.focus();
+                                        e.preventDefault();
+                                    }
+                                }
+                            }
+                        });
+                    }
+                }
+            }
+        });
+    </script>
+    <!-- Talk to an Expert Modal -->
+    <div class="notice-modal-overlay" id="expert-modal-overlay" role="dialog" aria-modal="true" tabindex="-1">
+        <div class="notice-modal" style="max-width: 420px; padding: 30px 25px; width: 92%;">
+            <button class="notice-close" id="expert-modal-close" aria-label="Close Modal" style="top: 10px; right: 15px; font-size: 1.2rem;"><i class="fas fa-times"></i></button>
+            <h3 style="margin-bottom: 8px; font-size: 1.5rem;">Talk to an Expert</h3>
+            <p style="margin-bottom: 20px; font-size: 0.85rem;">Please provide your details below and we will get back to you shortly.</p>
             
+            <form id="expert-contact-form" style="text-align: left;" action="https://formspree.io/f/mzebvgjb" method="POST">
+                <div class="form-group" style="margin-bottom: 15px;">
+                    <label class="form-label" for="expert-name" style="color: var(--text-main); font-size: 0.7rem; margin-bottom: 6px;">Full Name</label>
+                    <input type="text" id="expert-name" name="name" class="form-control" style="background: var(--background); color: var(--text-main); border: 1px solid var(--border); padding: 12px 15px; font-size: 0.9rem;" required>
+                </div>
+                <div class="form-group" style="margin-bottom: 15px;">
+                    <label class="form-label" for="expert-email" style="color: var(--text-main); font-size: 0.7rem; margin-bottom: 6px;">Email Address</label>
+                    <input type="email" id="expert-email" name="email" class="form-control" style="background: var(--background); color: var(--text-main); border: 1px solid var(--border); padding: 12px 15px; font-size: 0.9rem;" required>
+                </div>
+                <div class="form-group" style="margin-bottom: 20px;">
+                    <label class="form-label" for="expert-message" style="color: var(--text-main); font-size: 0.7rem; margin-bottom: 6px;">Message</label>
+                    <textarea id="expert-message" name="message" class="form-control" rows="3" style="background: var(--background); color: var(--text-main); border: 1px solid var(--border); padding: 12px 15px; font-size: 0.9rem; resize: vertical;" required></textarea>
+                </div>
+                <button type="submit" id="expert-submit-btn" class="btn btn-primary" style="width: 100%; padding: 14px; font-size: 0.85rem;">Send Message</button>
+                <div id="expert-form-message" style="margin-top: 15px; font-size: 0.85rem; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 600; display: none; text-align: center;"></div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const expertOverlay = document.getElementById('expert-modal-overlay');
+            const expertBtn = document.getElementById('talk-expert-btn');
+            const expertCloseBtn = document.getElementById('expert-modal-close');
+            
+            if(expertBtn) {
+                expertBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    expertOverlay.classList.add('active');
+                });
+            }
+
+            if(expertCloseBtn) {
+                expertCloseBtn.addEventListener('click', () => {
+                    expertOverlay.classList.remove('active');
+                });
+            }
+
             // ESC key to close
             document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape' && overlay.classList.contains('active')) {
-                    closeModal();
+                if (e.key === 'Escape' && expertOverlay.classList.contains('active')) {
+                    expertOverlay.classList.remove('active');
                 }
             });
 
-            // Focus trap
-            const focusableElements = modal.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
-            if (focusableElements.length > 0) {
-                const firstFocusable = focusableElements[0];
-                const lastFocusable = focusableElements[focusableElements.length - 1];
+            // Handle Form Submit
+            const expertForm = document.getElementById('expert-contact-form');
+            const expertSubmitBtn = document.getElementById('expert-submit-btn');
+            const expertFormMessage = document.getElementById('expert-form-message');
 
-                modal.addEventListener('keydown', (e) => {
-                    if (e.key === 'Tab') {
-                        if (e.shiftKey) { // Shift + Tab
-                            if (document.activeElement === firstFocusable) {
-                                lastFocusable.focus();
-                                e.preventDefault();
+            if(expertForm) {
+                expertForm.addEventListener('submit', async function(e) {
+                    e.preventDefault(); 
+                    expertSubmitBtn.innerText = 'Sending...';
+                    expertSubmitBtn.disabled = true;
+                    expertFormMessage.style.display = 'none';
+
+                    const formData = new FormData(expertForm);
+                    const plainData = Object.fromEntries(formData.entries());
+
+                    try {
+                        const response = await fetch(expertForm.action, {
+                            method: expertForm.method,
+                            body: JSON.stringify(plainData),
+                            headers: { 
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
                             }
-                        } else { // Tab
-                            if (document.activeElement === lastFocusable) {
-                                firstFocusable.focus();
-                                e.preventDefault();
+                        });
+
+                        if (response.ok) {
+                            expertFormMessage.style.display = 'block';
+                            expertFormMessage.style.color = '#155724'; 
+                            expertFormMessage.innerText = 'Thank you! Your message has been sent successfully.';
+                            expertForm.reset(); 
+                            
+                            setTimeout(() => {
+                                expertOverlay.classList.remove('active');
+                                expertFormMessage.style.display = 'none';
+                            }, 3000);
+                        } else {
+                            const responseData = await response.json();
+                            expertFormMessage.style.display = 'block';
+                            expertFormMessage.style.color = '#EF4444'; 
+                            if (Object.hasOwn(responseData, 'errors')) {
+                                expertFormMessage.innerText = responseData["errors"].map(error => error["message"]).join(", ");
+                            } else {
+                                expertFormMessage.innerText = 'An error occurred. Please try again.';
                             }
                         }
+                    } catch (error) {
+                        expertFormMessage.style.display = 'block';
+                        expertFormMessage.style.color = '#EF4444';
+                        expertFormMessage.innerText = 'Network error: ' + error.message + ' (Check AdBlocker/Privacy settings)';
+                    } finally {
+                        expertSubmitBtn.innerText = 'Send Message';
+                        expertSubmitBtn.disabled = false;
                     }
                 });
             }
