@@ -9,7 +9,9 @@ const hasVercelKV = () => {
 };
 
 const isDbConnected = () => {
-    return true; // We always have a DB now (either Vercel KV or Local JSON)
+    if (hasVercelKV()) return true;
+    if (process.env.VERCEL) return false; // Vercel filesystem is read-only, cannot fallback
+    return true; // Local JSON fallback
 };
 
 // Local JSON file database adapter
@@ -31,7 +33,11 @@ const localKV = {
             } catch(e) {}
         }
         data[key] = value;
-        fs.writeFileSync(localDbPath, JSON.stringify(data, null, 2), 'utf8');
+        try {
+            fs.writeFileSync(localDbPath, JSON.stringify(data, null, 2), 'utf8');
+        } catch(e) {
+            console.error('Failed to write to local DB:', e);
+        }
     }
 };
 
