@@ -190,7 +190,7 @@
         /* Experts Section */
         .expert-section { 
             background-color: var(--primary);
-            background-image: linear-gradient(rgba(8,12,17,0.75), rgba(8,12,17,0.80)), url('namche-bazaar-village-way-everest-base-camp-khumbu-region-nepal-himalaya.jpg');
+            background-image: linear-gradient(rgba(8,12,17,0.75), rgba(8,12,17,0.80)), url('namche-bazaar-village-way-everest-base-camp-khumbu-region-nepal-himalaya.webp');
             background-size: cover; background-position: center; background-attachment: fixed;
             color: white; position: relative; border-top: 1px solid rgba(212, 175, 55, 0.15); border-bottom: 1px solid rgba(212, 175, 55, 0.15); 
         }
@@ -224,7 +224,7 @@
 
         .form-card { 
             background-color: var(--primary);
-            background-image: linear-gradient(rgba(8,12,17,0.70), rgba(18,26,37,0.85)), url('ChatGPT Image Aug 21, 2026, 12_10_03 PM.png');
+            background-image: linear-gradient(rgba(8,12,17,0.70), rgba(18,26,37,0.85)), url('chatgpt.webp');
             background-size: cover; background-position: center; border-radius: var(--radius-sm); 
             padding: clamp(35px, 6vw, 70px); /* Scales well on mobile */
             box-shadow: 0 30px 60px -15px rgba(0,0,0,0.4); color: white; position: relative; overflow: hidden; 
@@ -273,7 +273,7 @@
         /* FOOTER */
         footer { 
             position: relative; background-color: var(--primary);
-            background-image: linear-gradient(rgba(8,12,17,0.85), rgba(8,12,17,0.90)), url('Basantapur.jpg');
+            background-image: linear-gradient(rgba(8,12,17,0.85), rgba(8,12,17,0.90)), url('Basantapur.webp');
             background-size: cover; background-position: center; color: white; 
             padding: 80px 0 30px; border-top: 1px solid rgba(255,255,255,0.05); 
         }
@@ -526,43 +526,23 @@
                 <p>Our multidisciplinary framework ensures all elements of your enterprise are managed with absolute precision and harmony.</p>
             </div>
             <div class="grid-3">
-                
-                <div class="card reveal">
-                    <div class="card-img-wrapper">
-                        <img src="https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?q=80&w=800&auto=format&fit=crop" alt="Accounting & Finance">
-                    </div>
-                    <div class="card-content">
-                        <div class="card-icon-floating"><i class="fas fa-chart-pie"></i></div>
-                        <h3>Accounting & Finance</h3>
-                        <p>Rigorous reporting, statutory audit, financial outsourcing, and enterprise-grade digital systems architecture.</p>
-                        <div class="card-meta"><span>Division A</span> <i class="fas fa-arrow-right" style="color: var(--accent);"></i></div>
-                    </div>
-                </div>
-
-                <div class="card reveal delay-1">
-                    <div class="card-img-wrapper">
-                        <img src="https://images.unsplash.com/photo-1589829085413-56de8ae18c73?q=80&w=800&auto=format&fit=crop" alt="Tax & Legal">
-                    </div>
-                    <div class="card-content">
-                        <div class="card-icon-floating"><i class="fas fa-scale-balanced"></i></div>
-                        <h3>Tax & Legal</h3>
-                        <p>Company registration, complex regulatory licensing, strategic taxation, and foreign investment structuring.</p>
-                        <div class="card-meta"><span>Division B</span> <i class="fas fa-arrow-right" style="color: var(--accent);"></i></div>
-                    </div>
-                </div>
-
-                <div class="card reveal delay-2">
-                    <div class="card-img-wrapper">
-                        <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=800&auto=format&fit=crop" alt="Governance">
-                    </div>
-                    <div class="card-content">
-                        <div class="card-icon-floating"><i class="fas fa-building-columns"></i></div>
-                        <h3>Governance & Policy</h3>
-                        <p>Corporate bylaws, high-level policy drafting, and executive regulatory advocacy, spearheaded by former officials.</p>
-                        <div class="card-meta"><span>Division C</span> <i class="fas fa-arrow-right" style="color: var(--accent);"></i></div>
-                    </div>
-                </div>
-
+                <% if (data.practice_areas && data.practice_areas.length > 0) { %>
+                    <% data.practice_areas.forEach(function(area, index) { %>
+                        <div class="card reveal <%= index > 0 ? 'delay-' + (index > 2 ? 2 : index) : '' %>">
+                            <div class="card-img-wrapper">
+                                <img src="<%= area.image %>" alt="<%= area.title %>">
+                            </div>
+                            <div class="card-content">
+                                <div class="card-icon-floating"><i class="fas <%= area.icon %>"></i></div>
+                                <h3><%= area.title %></h3>
+                                <p><%= area.description %></p>
+                                <div class="card-meta"><span><%= area.division %></span> <i class="fas fa-arrow-right" style="color: var(--accent);"></i></div>
+                            </div>
+                        </div>
+                    <% }); %>
+                <% } else { %>
+                    <p style="color: white;">No practice areas defined yet.</p>
+                <% } %>
             </div>
         </div>
     </section>

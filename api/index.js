@@ -6,10 +6,33 @@ module.exports = async (req, res) => {
     const default_data = {
         hero_title: "A consulting firm for everything.",
         hero_description: "Chartered accountants, lawyers, policy drafters, environmental specialists, former senior officials, and veteran bankers.",
-        hero_bg: "amazing-panorama-from-gokyo-ri-viewpoint-mount-everest-lho-la-nuptse-lhotse-peaks-sagarmatha-national-park-nepalgolden-sunrise-with-clear-blue-sky-mt-everest-peak-view.jpg",
-        founder_img: "Gemini_Generated_Image_mebqh2mebqh2mebq.jpg",
+        hero_bg: "amazing-panorama-from-gokyo-ri-viewpoint-mount-everest-lho-la-nuptse-lhotse-peaks-sagarmatha-national-park-nepalgolden-sunrise-with-clear-blue-sky-mt-everest-peak-view.webp",
+        founder_img: "Gemini_Generated_Image_mebqh2mebqh2mebq.webp",
         video_url: "https://www.youtube-nocookie.com/embed/ScMzIvxBSi4?controls=0&rel=0&autoplay=0&mute=1&loop=1&playlist=ScMzIvxBSi4",
-        notice: { enabled: false, title: "Important Notice", message: "Welcome to our newly updated platform.", button_text: "Acknowledge" }
+        notice: { enabled: false, title: "Important Notice", message: "Welcome to our newly updated platform.", button_text: "Acknowledge" },
+        practice_areas: [
+            {
+                title: "Accounting & Finance",
+                description: "Rigorous reporting, statutory audit, financial outsourcing, and enterprise-grade digital systems architecture.",
+                icon: "fa-chart-pie",
+                division: "Division A",
+                image: "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?q=80&w=800&auto=format&fit=crop"
+            },
+            {
+                title: "Tax & Legal",
+                description: "Company registration, complex regulatory licensing, strategic taxation, and foreign investment structuring.",
+                icon: "fa-scale-balanced",
+                division: "Division B",
+                image: "https://images.unsplash.com/photo-1589829085413-56de8ae18c73?q=80&w=800&auto=format&fit=crop"
+            },
+            {
+                title: "Governance & Policy",
+                description: "Corporate bylaws, high-level policy drafting, and executive regulatory advocacy, spearheaded by former officials.",
+                icon: "fa-building-columns",
+                division: "Division C",
+                image: "https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=800&auto=format&fit=crop"
+            }
+        ]
     };
     
     let data = default_data;

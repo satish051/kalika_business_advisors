@@ -20,15 +20,9 @@ module.exports = async (req, res) => {
     let authData = isDbConnected() ? (await kv.get('auth_json')) || null : null;
 
     if (req.method === 'POST' && isDbConnected()) {
-        const body = await new Promise((resolve) => {
-            let data = '';
-            req.on('data', chunk => data += chunk);
-            req.on('end', () => resolve(new URLSearchParams(data)));
-        });
-
-        const current = body.get('current_password') || '';
-        const newPass = body.get('new_password') || '';
-        const confirm = body.get('confirm_password') || '';
+        const current = req.body.current_password || '';
+        const newPass = req.body.new_password || '';
+        const confirm = req.body.confirm_password || '';
 
         try {
             if (!(await bcrypt.compare(current, authData.password_hash))) {

@@ -15,20 +15,15 @@ module.exports = async (req, res) => {
     if (!isDbConnected()) {
         error = 'CRITICAL ERROR: No Redis Database connected to Vercel! You cannot log in or save changes until you add the Upstash Redis database to your Vercel project.';
     } else if (req.method === 'POST') {
-        // Collect body data
-        const body = await new Promise((resolve) => {
-            let data = '';
-            req.on('data', chunk => data += chunk);
-            req.on('end', () => resolve(new URLSearchParams(data)));
-        });
+        const username = req.body.username || '';
+        const password = req.body.password || '';
 
         const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress || 'UNKNOWN';
 
         if (!(await checkThrottle(ip))) {
             error = 'Too many failed attempts. Please try again later.';
         } else {
-            const username = body.get('username') || '';
-            const password = body.get('password') || '';
+
 
             let authData = (await kv.get('auth_json')) || null;
             

@@ -1,46 +1,49 @@
-const { createClient } = require('redis');
+const { kv: vercelKV } = require('@vercel/kv');
+const fs = require('fs');
+const path = require('path');
 
-let client = null;
+const localDbPath = path.join(__dirname, '../../local_db.json');
 
-async function getClient() {
-    if (client) return client;
-    if (!process.env.REDIS_URL && !process.env.KV_REST_API_URL && !process.env.UPSTASH_REDIS_REST_URL) {
-        return null; // No database available
-    }
-    
-    // If we have REDIS_URL from the new Vercel Redis integration
-    if (process.env.REDIS_URL) {
-        client = createClient({ url: process.env.REDIS_URL });
-        await client.connect();
-        return client;
-    }
-    
-    return null; // Fallback for unsupported KV cases in this custom wrapper
-}
-
-const kv = {
-    async get(key) {
-        const c = await getClient();
-        if (!c) return null;
-        const val = await c.get(key);
-        if (!val) return null;
-        try {
-            return JSON.parse(val);
-        } catch(e) {
-            return val;
-        }
-    },
-    async set(key, value) {
-        const c = await getClient();
-        if (!c) return;
-        const val = typeof value === 'object' ? JSON.stringify(value) : value;
-        await c.set(key, val);
-    }
+const hasVercelKV = () => {
+    return !!(process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN);
 };
 
 const isDbConnected = () => {
-    return !!(process.env.REDIS_URL || process.env.KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL);
+    return true; // We always have a DB now (either Vercel KV or Local JSON)
 };
 
-// Exporting kv wrapper
+// Local JSON file database adapter
+const localKV = {
+    async get(key) {
+        if (!fs.existsSync(localDbPath)) return null;
+        try {
+            const data = JSON.parse(fs.readFileSync(localDbPath, 'utf8'));
+            return data[key] || null;
+        } catch (e) {
+            return null;
+        }
+    },
+    async set(key, value) {
+        let data = {};
+        if (fs.existsSync(localDbPath)) {
+            try {
+                data = JSON.parse(fs.readFileSync(localDbPath, 'utf8'));
+            } catch(e) {}
+        }
+        data[key] = value;
+        fs.writeFileSync(localDbPath, JSON.stringify(data, null, 2), 'utf8');
+    }
+};
+
+const kv = {
+    async get(key) {
+        if (hasVercelKV()) return await vercelKV.get(key);
+        return await localKV.get(key);
+    },
+    async set(key, value) {
+        if (hasVercelKV()) return await vercelKV.set(key, value);
+        return await localKV.set(key, value);
+    }
+};
+
 module.exports = { kv, isDbConnected };

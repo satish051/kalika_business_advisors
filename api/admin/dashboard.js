@@ -19,10 +19,15 @@ module.exports = async (req, res) => {
     const default_data = {
         hero_title: "A consulting firm for everything.",
         hero_description: "Chartered accountants, lawyers, policy drafters, environmental specialists, former senior officials, and veteran bankers.",
-        hero_bg: "amazing-panorama-from-gokyo-ri-viewpoint-mount-everest-lho-la-nuptse-lhotse-peaks-sagarmatha-national-park-nepalgolden-sunrise-with-clear-blue-sky-mt-everest-peak-view.jpg",
-        founder_img: "Gemini_Generated_Image_mebqh2mebqh2mebq.jpg",
+        hero_bg: "amazing-panorama-from-gokyo-ri-viewpoint-mount-everest-lho-la-nuptse-lhotse-peaks-sagarmatha-national-park-nepalgolden-sunrise-with-clear-blue-sky-mt-everest-peak-view.webp",
+        founder_img: "Gemini_Generated_Image_mebqh2mebqh2mebq.webp",
         video_url: "https://www.youtube-nocookie.com/embed/ScMzIvxBSi4?controls=0&rel=0&autoplay=0&mute=1&loop=1&playlist=ScMzIvxBSi4",
-        notice: { enabled: false, title: "Important Notice", message: "Welcome to our newly updated platform.", button_text: "Acknowledge" }
+        notice: { enabled: false, title: "Important Notice", message: "Welcome to our newly updated platform.", button_text: "Acknowledge" },
+        practice_areas: [
+            { title: "Accounting & Finance", description: "Rigorous reporting...", icon: "fa-chart-pie", division: "Division A", image: "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?q=80&w=800&auto=format&fit=crop" },
+            { title: "Tax & Legal", description: "Company registration...", icon: "fa-scale-balanced", division: "Division B", image: "https://images.unsplash.com/photo-1589829085413-56de8ae18c73?q=80&w=800&auto=format&fit=crop" },
+            { title: "Governance & Policy", description: "Corporate bylaws...", icon: "fa-building-columns", division: "Division C", image: "https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=800&auto=format&fit=crop" }
+        ]
     };
 
     let data = isDbConnected() ? ((await kv.get('site_data')) || default_data) : default_data;
@@ -84,6 +89,15 @@ module.exports = async (req, res) => {
                 } else {
                     data.clients = data.clients || [];
                 }
+                if (fields.practice_areas_json) {
+                    try {
+                        data.practice_areas = JSON.parse(fields.practice_areas_json);
+                    } catch (e) {
+                        console.error('Failed to parse practice_areas_json', e);
+                    }
+                } else {
+                    data.practice_areas = data.practice_areas || [];
+                }
                 
                 data.hero_title = (fields.hero_title || '').substring(0, 100);
                 data.hero_description = (fields.hero_description || '').substring(0, 500);
@@ -101,14 +115,32 @@ module.exports = async (req, res) => {
                 data.notice.button_text = (fields.notice_button_text || '').substring(0, 50);
 
                 for (const upload of uploads) {
-                    const blob = await put(upload.filename, upload.buffer, { access: 'public' });
-                    if (upload.name === 'hero_bg_file') data.hero_bg = blob.url;
-                    if (upload.name === 'founder_img_file') data.founder_img = blob.url;
+                    // For local file DB, we'll just base64 encode or we MUST have Vercel blob.
+                    // Wait, Vercel Blob requires process.env.BLOB_READ_WRITE_TOKEN.
+                    // Since we're trying to support local file DB, Vercel Blob WILL THROW AN ERROR locally if no token!
+                    let blobUrl = '';
+                    if (process.env.BLOB_READ_WRITE_TOKEN) {
+                        const blob = await put(upload.filename, upload.buffer, { access: 'public' });
+                        blobUrl = blob.url;
+                    } else {
+                        // Fallback to base64 for local dev without Blob token
+                        const b64 = upload.buffer.toString('base64');
+                        blobUrl = `data:${upload.mimeType || 'image/jpeg'};base64,${b64}`;
+                    }
+                    
+                    if (upload.name === 'hero_bg_file') data.hero_bg = blobUrl;
+                    if (upload.name === 'founder_img_file') data.founder_img = blobUrl;
                     
                     if (upload.name.startsWith('client_logo_file_')) {
                         const idx = parseInt(upload.name.split('_').pop());
                         if (data.clients && data.clients[idx]) {
-                            data.clients[idx].logo_url = blob.url;
+                            data.clients[idx].logo_url = blobUrl;
+                        }
+                    }
+                    if (upload.name.startsWith('practice_img_file_')) {
+                        const idx = parseInt(upload.name.split('_').pop());
+                        if (data.practice_areas && data.practice_areas[idx]) {
+                            data.practice_areas[idx].image = blobUrl;
                         }
                     }
                 }

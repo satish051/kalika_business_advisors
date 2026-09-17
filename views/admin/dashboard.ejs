@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Admin Dashboard - Node Serverless</title>
+    <link rel="icon" href="/logo.png" type="image/png">
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f4f4f5; color: #333; margin: 0; }
         .sidebar { width: 250px; background: #080C11; color: white; position: fixed; height: 100vh; padding: 20px; box-sizing: border-box; }
@@ -96,11 +97,27 @@
                 <input type="hidden" name="clients_json" id="clients_json">
             </div>
 
-            <button type="submit" class="btn">Save to Vercel KV</button>
+            <div class="card">
+                <h3>Practice Areas (Services)</h3>
+                <div id="practice-areas-container">
+                    <!-- Javascript will populate this -->
+                </div>
+                <button type="button" class="btn" onclick="addPracticeArea()" style="background:#4CAF50;margin-top:10px;">+ Add Practice Area</button>
+                <input type="hidden" name="practice_areas_json" id="practice_areas_json">
+            </div>
+
+            <button type="submit" class="btn" onclick="prepareSubmit()">Save to Vercel KV</button>
         </form>
     </div>
 
     <script>
+        // Form submit preparation to ensure all hidden fields are updated
+        function prepareSubmit() {
+            document.getElementById('notices_json').value = JSON.stringify(notices);
+            document.getElementById('clients_json').value = JSON.stringify(clients);
+            document.getElementById('practice_areas_json').value = JSON.stringify(practice_areas);
+        }
+
         let notices = <%- JSON.stringify(data.notices || []) %>;
         
         // Backwards compatibility for single notice
@@ -220,6 +237,64 @@
         }
 
         renderClients();
+
+        // Practice Areas Logic
+        let practice_areas = <%- JSON.stringify(data.practice_areas || []) %>;
+
+        function renderPracticeAreas() {
+            const container = document.getElementById('practice-areas-container');
+            container.innerHTML = '';
+            practice_areas.forEach((p, idx) => {
+                if (!p) return; 
+                container.innerHTML += `
+                    <div style="border: 1px solid #eee; padding: 15px; margin-bottom: 15px; border-radius: 4px; position:relative;">
+                        <button type="button" onclick="removePracticeArea(${idx})" style="position:absolute; right:15px; top:15px; background:#ff4444; color:white; border:none; padding:5px 10px; cursor:pointer; border-radius:4px;">X</button>
+                        
+                        <div class="form-group">
+                            <label>Service Title</label>
+                            <input type="text" onchange="updatePracticeArea(${idx}, 'title', this.value)" value="${p.title || ''}" placeholder="E.g. Accounting & Finance">
+                        </div>
+                        <div class="form-group">
+                            <label>Description</label>
+                            <textarea onchange="updatePracticeArea(${idx}, 'description', this.value)" rows="2" placeholder="Brief description of service">${p.description || ''}</textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>FontAwesome Icon Class (e.g. fa-chart-pie)</label>
+                            <input type="text" onchange="updatePracticeArea(${idx}, 'icon', this.value)" value="${p.icon || ''}">
+                        </div>
+                        <div class="form-group">
+                            <label>Division Label</label>
+                            <input type="text" onchange="updatePracticeArea(${idx}, 'division', this.value)" value="${p.division || ''}">
+                        </div>
+                        <div class="form-group">
+                            <label>Background Image (Upload New)</label>
+                            <input type="file" name="practice_img_file_${idx}" accept="image/jpeg, image/png, image/webp">
+                            ${p.image ? `<div style="margin-top:10px;"><small>Current Image:</small><br><img src="${p.image}" style="max-height: 100px; border-radius: 4px;"></div>` : ''}
+                        </div>
+                    </div>
+                `;
+            });
+            document.getElementById('practice_areas_json').value = JSON.stringify(practice_areas);
+        }
+
+        function updatePracticeArea(idx, key, value) {
+            practice_areas[idx][key] = value;
+            document.getElementById('practice_areas_json').value = JSON.stringify(practice_areas);
+        }
+
+        function addPracticeArea() {
+            practice_areas.push({ title: '', description: '', icon: 'fa-briefcase', division: 'Division', image: '' });
+            renderPracticeAreas();
+        }
+
+        function removePracticeArea(idx) {
+            if (confirm('Remove this practice area?')) {
+                practice_areas.splice(idx, 1);
+                renderPracticeAreas();
+            }
+        }
+
+        renderPracticeAreas();
     </script>
 </body>
 </html>
